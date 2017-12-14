@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Borgernes hus event calender feature.
+ */
+
+include_once 'borgernes_hus_event_calender.features.inc';

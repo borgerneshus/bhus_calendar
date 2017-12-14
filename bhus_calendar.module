@@ -1,0 +1,148 @@
+<?php
+function bhus_calendar_init()
+{
+    drupal_add_css(drupal_get_path('module', 'bhus_calendar') ."/css/oc_bhus_calendar.css");
+}
+function bhus_calendar_calendar_groupby_times_alter(&$times)
+{
+   $open_hours = array();
+   $open_hours[] = "08:00:00";
+   $open_hours[] = "09:00:00";
+   $open_hours[] = "10:00:00";
+   $open_hours[] = "11:00:00";
+   $open_hours[] = "12:00:00";
+   $open_hours[] = "13:00:00";
+   $open_hours[] = "14:00:00";
+   $open_hours[] = "15:00:00";
+   $open_hours[] = "16:00:00";
+   $open_hours[] = "17:00:00";
+   $open_hours[] = "18:00:00";
+   $open_hours[] = "19:00:00";
+   $open_hours[] = "20:00:00";
+   $open_hours[] = "21:00:00";
+   $open_hours[] = "22:00:00";
+   $times = $open_hours;
+        
+}
+function bhus_calendar_node_validate($node, $form, &$form_state) {
+  if ($node->type =="bhus_events" ) {
+        $conflicts = array();
+       $conflicts = HasTimeConflict($node,$form_state["values"]["field_date"]["und"],$form_state["values"]["field_event_location"]["und"][0]["tid"]);
+
+        if(sizeof($conflicts) != 0)
+        {
+            foreach($conflicts as $index => $conflict)
+            {
+                /*
+                 * Hack to show all date conflicts
+                 */
+                if($index == 0)
+                {
+                    form_set_error('field_date', $conflict);
+                }
+                else
+                {
+                    form_set_error('field_date_'.$index,  $conflict);
+                }
+            }
+        }
+  }
+}
+/*
+ * Internal functions
+ */
+function HasTimeConflict($node,$dates,$location_tid)
+{
+       $conflicts = array();
+       //get all nodes with larger or equal start date
+       $query = new EntityFieldQuery();
+       $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'bhus_events')
+      ->propertyCondition('status', 1)
+      ->propertyCondition('nid', $node->nid , "!=")
+      ->fieldCondition('field_event_location', 'tid', $location_tid, '=');
+       $result = $query->execute();
+       
+       if(sizeof($result) != 0)
+       {
+           foreach($result["node"] as $data)
+           {
+               $n = node_load($data->nid);
+               $rrule = $n->field_date["und"][0]["rrule"];
+               //calculate the event dates and check if they overlap with ours ?
+               $rrdates =  _date_repeat_calc($rrule, $n->field_date["und"][0]['value'], null, array(), "Europe/Berlin", array());
+               foreach($dates as $date)
+               {
+                foreach($rrdates as $rrdate)
+                {
+                    $rrstart =  new DateTime($rrdate);
+                    $rrstart->setTimeZone(new DateTimeZone('Europe/Copenhagen'));
+                    $start =  new DateTime($date['value']);
+                     $start->setTimeZone(new DateTimeZone('Europe/Copenhagen'));
+                    $diff = $start->diff($rrstart);
+                    //dont compare differnet dates :)
+                    if($diff->format('%a') !== '0')
+                    {
+                        continue;
+                    }
+                    $Hour= date("H",strtotime($n->field_date["und"][0]["value2"]));
+                    $Minute= date("i",strtotime($n->field_date["und"][0]["value2"]));
+                    /*
+                     * is there any conflicts ? 
+                     */
+                    $rrend =  new DateTime($rrdate);
+                    $rrend->setTime($Hour,$Minute);
+                    $rrend->setTimeZone(new DateTimeZone('Europe/Copenhagen'));
+                    
+                    $end =  new DateTime($date['value2']);
+                   
+                    $end->setTimeZone(new DateTimeZone('Europe/Copenhagen'));
+                    //time is in an event slot
+                    if($rrstart < $start && $rrend > $end)
+                    {
+                        array_push($conflicts, "Konflikt(Inden for event) ".$node->title.": " . $start->format("d-m-Y H:i") . " - " .$end->format("H:i"). " / " .$rrstart->format("d-m-Y H:i") . " - " .$rrend->format("H:i"));
+                        continue;
+                    } //it ends inside a event
+                    else if($rrstart < $start && $rrend > $start)
+                    {
+                         array_push($conflicts, "Konflikt(Starter i andet event) ".$node->title.": " . $start->format("d-m-Y H:i") . " - " .$end->format("H:i"). " / " .$rrstart->format("d-m-Y H:i") . " - " .$rrend->format("H:i"));
+                         continue;
+                    } //it ends inside a event
+                    else if($rrstart < $end && $rrend > $end)
+                    {
+                         array_push($conflicts,"Konflikt(slutter i andet event) ".$node->title.": " . $start->format("d-m-Y H:i") . " - " .$end->format("H:i"). " / " .$rrstart->format("d-m-Y H:i") . " - " .$rrend->format("H:i"));
+                         continue;
+                    }
+                    else if($start < $rrend && $end > $rrend)
+                    {
+                         array_push($conflicts,"Konflikt(overlap) ".$node->title.": " . $start->format("d-m-Y H:i") . " - " .$end->format("H:i"). " / " .$rrstart->format("d-m-Y H:i") . " - " .$rrend->format("H:i"));
+                         continue;
+                    }
+                }
+               }
+           }
+
+       }
+     
+      return $conflicts;
+}
+/**
+ * Implements hook_preprocess_calendar_item().
+ */
+function bhus_calendar_preprocess_calendar_item(&$vars) {
+  // This alter used to add a class like into item display.
+  $item = $vars['item'];
+  $term = taxonomy_term_load($vars['item']->entity->field_event_location["und"][0]["tid"]);
+  $granularity = $vars['item']->granularity;
+  $vars['item']->granularity = 'colors-taxonomy-term-' . $term->name . ' ' . $granularity;
+
+  $item = $vars['item'];
+
+  // Hidden excude item.
+  $multiday_hidden = !empty($vars['view']->style_options['multiday_hidden']) ? $vars['view']->style_options['multiday_hidden'] : array();
+  foreach ($vars['view']->field as $id => $field) {
+    if ($field->options['exclude'] || (!empty($item->is_multi_day) && in_array($id, $multiday_hidden))) {
+      unset($vars['rendered_fields'][$id]);
+    }
+  }
+}
