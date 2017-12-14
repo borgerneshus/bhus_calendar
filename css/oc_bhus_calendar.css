@@ -35,3 +35,10 @@
 {
     padding-bottom: 0px !important;
 }
+/*
+* Fix hide on intranet
+*/
+.view-bhus-events .views-submit-button
+{
+    display:none;
+}
