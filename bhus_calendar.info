@@ -9,5 +9,5 @@ version = "7.x-1.0"
 core = "7.x"
 
 dependencies[] = calendar
-dependencies[] = borgernes_hus_event_calendar
+dependencies[] = borgernes_hus_event_calender
 dependencies[] = date_repeat
