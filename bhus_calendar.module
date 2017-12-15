@@ -166,7 +166,7 @@ function bhus_calendar_form_validate_custom(&$form, &$form_state) {
         $index = date('w', strtotime($form_state['values']['field_date_value']['value']));
         if($index != 1)
         {
-           $prev_monday =  date('Y-m-d', strtotime('previous monday', strtotime($form_state['values']['field_date_value']['value'])));
+           $prev_monday =  date('d/m/Y', strtotime('previous monday', strtotime($form_state['values']['field_date_value']['value'])));
            $form_state['values']['field_date_value']['value'] = $prev_monday;
            $form['field_date_value']["value"]['date']['#value'] = $prev_monday;
         }
