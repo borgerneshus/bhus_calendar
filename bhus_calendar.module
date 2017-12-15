@@ -146,3 +146,29 @@ function bhus_calendar_preprocess_calendar_item(&$vars) {
     }
   }
 }
+
+function bhus_calendar_form_alter(&$form, $form_state) {
+
+  // @NOTE: $form['#id'] will vary based on your your view & display machine names.
+  // Here the view machine name is 'view' & display machine name is 'display'.
+  // Use Devel's dpm() to inspect or the Views administration UI
+  // to find your own form's values.
+
+    if ($form['#id'] == 'views-exposed-form-bhus-events-page') {
+      // @TODO: Add form alter code.
+        $form['#validate'][] = 'bhus_calendar_form_validate_custom';
+    }
+}
+function bhus_calendar_form_validate_custom(&$form, &$form_state) {
+    //make sure date selected is start of week.
+    if(isset( $form_state['values']['field_date_value']['value']))
+    {
+        $index = date('w', strtotime($form_state['values']['field_date_value']['value']));
+        if($index != 1)
+        {
+           $prev_monday =  date('Y-m-d', strtotime('previous monday', strtotime($form_state['values']['field_date_value']['value'])));
+           $form_state['values']['field_date_value']['value'] = $prev_monday;
+           $form['field_date_value']["value"]['date']['#value'] = $prev_monday;
+        }
+    }
+}

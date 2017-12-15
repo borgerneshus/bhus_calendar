@@ -23,7 +23,6 @@ function borgernes_hus_event_calender_views_default_views() {
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'bhus events';
-  $handler->display->display_options['use_ajax'] = TRUE;
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'role';
   $handler->display->display_options['access']['role'] = array(
@@ -34,8 +33,8 @@ function borgernes_hus_event_calender_views_default_views() {
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['exposed_form']['options']['autosubmit'] = TRUE;
-  $handler->display->display_options['pager']['type'] = 'date_views_pager';
-  $handler->display->display_options['pager']['options']['skip_empty_pages'] = 0;
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'calendar_style';
   $handler->display->display_options['style_options']['calendar_type'] = 'week';
   $handler->display->display_options['style_options']['name_size'] = '3';
@@ -114,9 +113,38 @@ function borgernes_hus_event_calender_views_default_views() {
     2 => '2',
     1 => 0,
     3 => 0,
+    4 => 0,
   );
   $handler->display->display_options['filters']['field_event_location_tid']['type'] = 'select';
   $handler->display->display_options['filters']['field_event_location_tid']['vocabulary'] = 'event_lokation';
+  /* Filter criterion: Content: date -  start date (field_date) */
+  $handler->display->display_options['filters']['field_date_value']['id'] = 'field_date_value';
+  $handler->display->display_options['filters']['field_date_value']['table'] = 'field_data_field_date';
+  $handler->display->display_options['filters']['field_date_value']['field'] = 'field_date_value';
+  $handler->display->display_options['filters']['field_date_value']['operator'] = '>=';
+  $handler->display->display_options['filters']['field_date_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_date_value']['expose']['operator_id'] = 'field_date_value_op';
+  $handler->display->display_options['filters']['field_date_value']['expose']['label'] = 'Fra Dato';
+  $handler->display->display_options['filters']['field_date_value']['expose']['description'] = 'Dato starter altid fra mandag før valgt dato.';
+  $handler->display->display_options['filters']['field_date_value']['expose']['operator'] = 'field_date_value_op';
+  $handler->display->display_options['filters']['field_date_value']['expose']['identifier'] = 'field_date_value';
+  $handler->display->display_options['filters']['field_date_value']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+  );
+  $handler->display->display_options['filters']['field_date_value']['group_info']['label'] = 'date -  start date (field_date)';
+  $handler->display->display_options['filters']['field_date_value']['group_info']['identifier'] = 'field_date_value';
+  $handler->display->display_options['filters']['field_date_value']['group_info']['remember'] = FALSE;
+  $handler->display->display_options['filters']['field_date_value']['group_info']['group_items'] = array(
+    1 => array(),
+    2 => array(),
+    3 => array(),
+  );
+  $handler->display->display_options['filters']['field_date_value']['form_type'] = 'date_popup';
+  $handler->display->display_options['filters']['field_date_value']['default_date'] = 'monday this week';
+  $handler->display->display_options['filters']['field_date_value']['year_range'] = '-1:+3';
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
