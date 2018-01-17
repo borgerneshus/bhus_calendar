@@ -53,6 +53,7 @@ function bhus_calendar_node_validate($node, $form, &$form_state) {
  */
 function HasTimeConflict($node,$dates,$location_tid)
 {
+       module_load_include('inc', 'date_repeat', 'date_repeat_calc');
        $conflicts = array();
        //get all nodes with larger or equal start date
        $query = new EntityFieldQuery();
@@ -134,7 +135,7 @@ function bhus_calendar_preprocess_calendar_item(&$vars) {
   $item = $vars['item'];
   $term = taxonomy_term_load($vars['item']->entity->field_event_location["und"][0]["tid"]);
   $granularity = $vars['item']->granularity;
-  $vars['item']->granularity = 'colors-taxonomy-term-' . $term->name . ' ' . $granularity;
+  $vars['item']->granularity = 'colors-taxonomy-term-' . str_replace(' ','_',$term->name) . ' ' . $granularity;
 
   $item = $vars['item'];
 
@@ -155,20 +156,164 @@ function bhus_calendar_form_alter(&$form, $form_state) {
   // to find your own form's values.
 
     if ($form['#id'] == 'views-exposed-form-bhus-events-page') {
+        drupal_add_js(drupal_get_path('module', 'bhus_calendar') ."/js/oc_bhus_calendar.js");
+        drupal_add_js(drupal_get_path('module', 'bhus_calendar') ."/js/oc_bhus_calendar_popup.js");
       // @TODO: Add form alter code.
         $form['#validate'][] = 'bhus_calendar_form_validate_custom';
+        $form['submit_calendar_thisweek'] = array
+        (
+          '#type' => 'submit',
+          '#value' => "Idag",
+          //'#prefix' => '<div class="submit_calendar_thisweek">',
+        );
+        $form['submit_calendar_prevweek'] = array
+        (
+          '#type' => 'submit',
+          '#value' => "Tilbage",
+          //'#prefix' => '<div class="submit_calendar_prevweek">',
+        );
+        $form['submit_calendar_nextweek'] = array
+        (
+          '#type' => 'submit',
+          '#value' => "Frem",
+          //'#prefix' => '<div class="submit_calendar_nextweek">',
+        );
+        
     }
 }
 function bhus_calendar_form_validate_custom(&$form, &$form_state) {
     //make sure date selected is start of week.
-    if(isset( $form_state['values']['field_date_value']['value']))
+    if(isset( $form_state['values']['field_date_value']['min']))
     {
-        $index = date('w', strtotime($form_state['values']['field_date_value']['value']));
-        if($index != 1)
+        $template_start_value = "";
+        if($form_state['clicked_button']['#id'] == "edit-submit-calendar-thisweek")
         {
-           $prev_monday =  date('d/m/Y', strtotime('previous monday', strtotime($form_state['values']['field_date_value']['value'])));
-           $form_state['values']['field_date_value']['value'] = $prev_monday;
-           $form['field_date_value']["value"]['date']['#value'] = $prev_monday;
+               $sunday_calc = date($form['field_date_value']["min"]['#date_format'], strtotime("monday this week"));
+               $prev_monday =  date($form['field_date_value']["min"]['#date_format'], strtotime("monday this week"));
+               $this_sunday = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday ', strtotime($sunday_calc)));
+               $template_start_value = date($form['field_date_value']["min"]['#date_format'], strtotime("monday this week"));
+               
+               $form['field_date_value']["max"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($sunday_calc)));
+               $form['field_date_value']["min"]['date']['#value'] = $sunday_calc;
+               $form_state['values']['field_date_value']['max'] = $this_sunday;
+               $form_state['values']['field_date_value']['min'] = $prev_monday;
         }
+        else if($form_state['clicked_button']['#id'] == "edit-submit-calendar-nextweek")
+        {
+               $date = isset($form_state['values']['field_date_value']['min']['date']) ? $form_state['values']['field_date_value']['min']['date'] : $form_state['values']['field_date_value']['min'];
+               $prev_monday =  date($form['field_date_value']["min"]['#date_format'], strtotime('next monday', strtotime($date)));
+               
+               $sunday_calc =  date($form['field_date_value']["min"]['#date_format'], strtotime('next monday', strtotime($date)));
+               $this_sunday = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($sunday_calc)));
+               
+               $template_start_value = date($form['field_date_value']["min"]['#date_format'], strtotime('next monday', strtotime($date)));
+               if(isset($form_state['values']['field_date_value']['min']['date']))
+               {
+                   $form_state['values']['field_date_value']['min']['date'] = $prev_monday;
+                   $form_state['values']['field_date_value']['max']['date'] = $this_sunday;
+               }
+               else
+               {
+                   $form_state['values']['field_date_value']['min'] = date($form['field_date_value']["min"]['#date_format'], strtotime($prev_monday));
+                   $form_state['values']['field_date_value']['max'] = $this_sunday;
+               }
+               $form['field_date_value']["min"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime('next monday', strtotime($date)));
+               $form['field_date_value']["max"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($sunday_calc)));
+               
+            
+        }
+        else if($form_state['clicked_button']['#id'] == "edit-submit-calendar-prevweek")
+        {
+               $date = isset($form_state['values']['field_date_value']['min']['date']) ? $form_state['values']['field_date_value']['min']['date'] : $form_state['values']['field_date_value']['min'];
+               $prev_monday =  date($form['field_date_value']["min"]['#date_format'],strtotime('previous monday ', strtotime($date)));
+               $sunday_calc =  date($form['field_date_value']["min"]['#date_format'], strtotime('previous monday ', strtotime($date)));
+               
+               $this_sunday = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($sunday_calc)));
+               
+               $template_start_value = date($form['field_date_value']["min"]['#date_format'],strtotime('previous monday', strtotime($date)));
+               
+               if(isset($form_state['values']['field_date_value']['min']['date']))
+               {
+                    $form_state['values']['field_date_value']['min']['date'] = $prev_monday;
+                    $form_state['values']['field_date_value']['max']['date'] = $this_sunday;
+               }
+               else
+               {
+                    $form_state['values']['field_date_value']['min'] = date($form['field_date_value']["min"]['#date_format'], strtotime($prev_monday));
+                    $form_state['values']['field_date_value']['max'] = $this_sunday;
+               }
+               $form['field_date_value']["min"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime('previous monday', strtotime($date)));
+               $form['field_date_value']["max"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday +1 days', strtotime($sunday_calc)));
+               
+            
+        }
+        else
+        {
+            $index = date('w', strtotime($form_state['values']['field_date_value']['min']));
+            if($index != 1)
+            {
+               $prev_monday =  date($form['field_date_value']["min"]['#date_format'], strtotime('previous monday', strtotime($form_state['values']['field_date_value']['min'])));
+               $sunday_calc =  date($form['field_date_value']["min"]['#date_format'], strtotime('previous monday', strtotime($form_state['values']['field_date_value']['min'])));
+               $this_sunday = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($sunday_calc)));
+               
+               $form['field_date_value']["max"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($sunday_calc)));
+               $form['field_date_value']["min"]['date']['#value'] = $sunday_calc;
+               
+               $form_state['values']['field_date_value']['max'] = $this_sunday;
+               $form_state['values']['field_date_value']['min'] = $prev_monday;
+              
+               
+               
+                $template_start_value = $sunday_calc;
+            }
+            else
+            {
+                $this_sunday = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($form_state['values']['field_date_value']['min'])));
+                $sunday_calc =  date($form['field_date_value']["min"]['#date_format'],strtotime($form_state['values']['field_date_value']['min']));
+                $prev_monday =  date($form['field_date_value']["min"]['#date_format'], strtotime($form_state['values']['field_date_value']['min']));
+                
+                 $form['field_date_value']["min"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime($form_state['values']['field_date_value']['min']));
+                 $form['field_date_value']["max"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($sunday_calc)));
+                
+                 $form_state['values']['field_date_value']['min'] = $prev_monday;
+                 $form_state['values']['field_date_value']['max'] = $this_sunday;
+                
+                $template_start_value = $sunday_calc;
+            }
+        }
+        $_GET['field_date_value']['value']['date'] = $template_start_value;
     }
+}
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function bhus_calendar_theme_registry_alter(&$theme_registry) {
+  // Defined path to the current module.
+  $module_path = drupal_get_path('module', 'bhus_calendar');
+  // Find all .tpl.php files in this module's folder recursively.
+  $template_file_objects = drupal_find_theme_templates($theme_registry, '.tpl.php', $module_path);
+  // Iterate through all found template file objects.
+  foreach ($template_file_objects as $key => $template_file_object) {
+    // If the template has not already been overridden by a theme.
+    if (!isset($theme_registry[$key]['theme path']) || !preg_match('#/themes/#', $theme_registry[$key]['theme path'])) {
+      // Alter the theme path and template elements.
+      $theme_registry[$key]['theme path'] = $module_path;
+      $theme_registry[$key] = array_merge($theme_registry[$key], $template_file_object);
+      $theme_registry[$key]['type'] = 'module';
+    }
+  }
+}
+/*
+ * 
+ */
+function bhus_calendar_views_query_alter(&$view, &$query) {
+if ($view->name == 'bhus_events' && $view->current_display == 'page') {
+$query->where['1']['conditions'][2]['field'] = "DATE_FORMAT(field_data_field_date.field_date_value, '%Y-%m-%d') >= :field_data_field_date_field_date_value AND DATE_FORMAT(field_data_field_date.field_date_value2, '%Y-%m-%d') <= :field_data_field_date_field_date_value1";
+//$query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value']= date('Y-m-d',strtotime($query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value']));
+//$query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value1']= date('Y-m-d',strtotime($query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value1']));
+unset($query->where['date']);
+$test2 = $query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value1'];
+$view->argument['date_argument']->max_date =  new DateObject(date("Y-m-d 23:00:00",strtotime($test2)));
+$view->argument['date_argument']->min_date = new DateObject(date("Y-m-d 23:00:00",strtotime($query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value'])));
+}
 }

@@ -1,6 +1,6 @@
 .calendar-calendar .week-view .full div.single-day div.weekview, .calendar-calendar .day-view .full div.single-day div.dayview
 {
-    background-color:rgb(193, 233, 254) !important;
+    background-color:rgb(193, 233, 254);
 }
 .calendar-calendar .week-view .full td .inner div.calendar.weekview div a,.calendar-calendar .week-view .full td .inner div.calendar.weekview div a:hover
 {
@@ -35,10 +35,35 @@
 {
     padding-bottom: 0px !important;
 }
+.date-today
+{
+    border-top: 5px solid royalblue !important;
+}
+#edit-field-date-value-max-inside-wrapper
+{
+    display:none;
+}
 /*
 * Fix hide on intranet
 */
 .view-bhus-events .views-submit-button
 {
-    display:none;
+    //display:none;
+}
+/*
+* colors for internal events
+*/
+.colors-taxonomy-term-Amfitrappen
+{
+    background-color:rgb(193, 233, 254) !important;
+    
+}
+.colors-taxonomy-term-Borgernes_værksted
+{
+    background-color:lightsalmon !important;
+    
+}
+.colors-taxonomy-term-Borgernes_Torv
+{
+    background-color: lightpink !important;
 }
