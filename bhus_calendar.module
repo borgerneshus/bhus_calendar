@@ -160,7 +160,12 @@ function bhus_calendar_form_alter(&$form, $form_state) {
         drupal_add_js(drupal_get_path('module', 'bhus_calendar') ."/js/oc_bhus_calendar_popup.js");
       // @TODO: Add form alter code.
         $form['#validate'][] = 'bhus_calendar_form_validate_custom';
-        
+       $form['submit_calendar_thisweek'] = array
+        (
+          '#type' => 'submit',
+          '#value' => "Idag",
+          //'#prefix' => '<div class="submit_calendar_thisweek">',
+        );
         $form['submit_calendar_prevweek'] = array
         (
           '#type' => 'submit',
@@ -173,12 +178,7 @@ function bhus_calendar_form_alter(&$form, $form_state) {
           '#value' => "Frem",
           //'#prefix' => '<div class="submit_calendar_nextweek">',
         );
-        $form['submit_calendar_thisweek'] = array
-        (
-          '#type' => 'submit',
-          '#value' => "Idag",
-          //'#prefix' => '<div class="submit_calendar_thisweek">',
-        );
+
         
     }
 }
