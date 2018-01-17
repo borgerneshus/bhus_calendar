@@ -57,7 +57,8 @@ foreach ($day_names as $key => $value) {
     {
         $day_names[$key]['class'] .=" date-today ";
     }
-  $date = date('d/m',strtotime($value['header_id'],strtotime($start_date)));
+    
+  $date = date('d/m',strtotime($start_date."+{$key} days"));
   $header_ids[$key] = $value['header_id'];
   $day_names[$key]['data'] = $value['header_id'] . " ". $date;
 }
