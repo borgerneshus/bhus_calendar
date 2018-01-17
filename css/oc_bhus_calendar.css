@@ -43,6 +43,10 @@
 {
     display:none;
 }
+.div.views-exposed-widget.views-submit-button button {
+    width: 24% !important;
+    margin-right: 10px;
+}
 /*
 * Fix hide on intranet
 */
