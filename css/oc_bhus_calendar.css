@@ -54,6 +54,10 @@ div.views-exposed-widget.views-submit-button button {
 /*
 * Fix hide on intranet
 */
+.js-hide
+{
+    display:none !important;
+}
 .view-bhus-events .views-submit-button
 {
     //display:none;
