@@ -186,64 +186,50 @@ function bhus_calendar_form_validate_custom(&$form, &$form_state) {
     if(isset( $form_state['values']['field_date_value']['min']))
     {
         $template_start_value = "";
+        
         if($form_state['clicked_button']['#id'] == "edit-submit-calendar-thisweek")
         {
                $sunday_calc = date($form['field_date_value']["min"]['#date_format'], strtotime("monday this week"));
-               $prev_monday =  date($form['field_date_value']["min"]['#date_format'], strtotime("monday this week"));
-               $this_sunday = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday ', strtotime($sunday_calc)));
-               $template_start_value = date($form['field_date_value']["min"]['#date_format'], strtotime("monday this week"));
+
+               $template_start_value = date("Y-m-d", strtotime("monday this week"));
                
                $form['field_date_value']["max"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($sunday_calc)));
                $form['field_date_value']["min"]['date']['#value'] = $sunday_calc;
-               $form_state['values']['field_date_value']['max'] = $this_sunday;
-               $form_state['values']['field_date_value']['min'] = $prev_monday;
+               
+               $form_state['values']['field_date_value']['min'] =  date("Y-m-d", strtotime("monday this week"));
+               $form_state['values']['field_date_value']['max'] = date("Y-m-d", strtotime('this sunday ', strtotime(date("Y-m-d", strtotime("monday this week")))));
         }
         else if($form_state['clicked_button']['#id'] == "edit-submit-calendar-nextweek")
         {
-               $date = isset($form_state['values']['field_date_value']['min']['date']) ? $form_state['values']['field_date_value']['min']['date'] : $form_state['values']['field_date_value']['min'];
-               $prev_monday =  date($form['field_date_value']["min"]['#date_format'], strtotime('next monday', strtotime($date)));
+               $date = isset($form_state['values']['field_date_value']['min']['date']) ? $form_state['values']['field_date_value']['min']['date'] : $form_state['values']['field_date_value']['min'];               
+               $sunday_calc =  date("Y-m-d", strtotime('next monday', strtotime($date)));
                
-               $sunday_calc =  date($form['field_date_value']["min"]['#date_format'], strtotime('next monday', strtotime($date)));
-               $this_sunday = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($sunday_calc)));
+               $this_sunday = date("Y-m-d",strtotime('this sunday', strtotime($sunday_calc)));
                
-               $template_start_value = date($form['field_date_value']["min"]['#date_format'], strtotime('next monday', strtotime($date)));
-               if(isset($form_state['values']['field_date_value']['min']['date']))
-               {
-                   $form_state['values']['field_date_value']['min']['date'] = $prev_monday;
-                   $form_state['values']['field_date_value']['max']['date'] = $this_sunday;
-               }
-               else
-               {
-                   $form_state['values']['field_date_value']['min'] = date($form['field_date_value']["min"]['#date_format'], strtotime($prev_monday));
-                   $form_state['values']['field_date_value']['max'] = $this_sunday;
-               }
-               $form['field_date_value']["min"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime('next monday', strtotime($date)));
-               $form['field_date_value']["max"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($sunday_calc)));
+               $template_start_value = date("Y-m-d", strtotime('next monday', strtotime($date)));
+    
+               $form_state['values']['field_date_value']['min'] = $sunday_calc;
+               $form_state['values']['field_date_value']['max'] = $this_sunday;
+               
+               $form['field_date_value']["min"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime($sunday_calc));
+               $form['field_date_value']["max"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime($this_sunday));
                
             
         }
         else if($form_state['clicked_button']['#id'] == "edit-submit-calendar-prevweek")
         {
                $date = isset($form_state['values']['field_date_value']['min']['date']) ? $form_state['values']['field_date_value']['min']['date'] : $form_state['values']['field_date_value']['min'];
-               $prev_monday =  date($form['field_date_value']["min"]['#date_format'],strtotime('previous monday ', strtotime($date)));
-               $sunday_calc =  date($form['field_date_value']["min"]['#date_format'], strtotime('previous monday ', strtotime($date)));
+               $prev_monday =  date("Y-m-d",strtotime('previous monday ', strtotime($date)));
                
-               $this_sunday = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($sunday_calc)));
+               $this_sunday = date("Y-m-d",strtotime('this sunday', strtotime($prev_monday)));
                
-               $template_start_value = date($form['field_date_value']["min"]['#date_format'],strtotime('previous monday', strtotime($date)));
+               $template_start_value = date("Y-m-d",strtotime('previous monday', strtotime($date)));
                
-               if(isset($form_state['values']['field_date_value']['min']['date']))
-               {
-                    $form_state['values']['field_date_value']['min']['date'] = $prev_monday;
-                    $form_state['values']['field_date_value']['max']['date'] = $this_sunday;
-               }
-               else
-               {
-                    $form_state['values']['field_date_value']['min'] = date($form['field_date_value']["min"]['#date_format'], strtotime($prev_monday));
-                    $form_state['values']['field_date_value']['max'] = $this_sunday;
-               }
-               $form['field_date_value']["min"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime('previous monday', strtotime($date)));
-               $form['field_date_value']["max"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday +1 days', strtotime($sunday_calc)));
+                $form_state['values']['field_date_value']['min'] = $prev_monday;
+                $form_state['values']['field_date_value']['max'] = $this_sunday;
+               
+               $form['field_date_value']["min"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime($prev_monday));
+               $form['field_date_value']["max"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime($this_sunday));
                
             
         }
@@ -252,33 +238,29 @@ function bhus_calendar_form_validate_custom(&$form, &$form_state) {
             $index = date('w', strtotime($form_state['values']['field_date_value']['min']));
             if($index != 1)
             {
-               $prev_monday =  date($form['field_date_value']["min"]['#date_format'], strtotime('previous monday', strtotime($form_state['values']['field_date_value']['min'])));
-               $sunday_calc =  date($form['field_date_value']["min"]['#date_format'], strtotime('previous monday', strtotime($form_state['values']['field_date_value']['min'])));
-               $this_sunday = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($sunday_calc)));
+               $prev_monday =  date("Y-m-d", strtotime('previous monday', strtotime($form_state['values']['field_date_value']['min'])));
+               $this_sunday = date("Y-m-d",strtotime('this sunday', strtotime($prev_monday)));
                
-               $form['field_date_value']["max"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($sunday_calc)));
-               $form['field_date_value']["min"]['date']['#value'] = $sunday_calc;
+               $form['field_date_value']["max"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime($this_sunday));
+               $form['field_date_value']["min"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime($prev_monday));
                
                $form_state['values']['field_date_value']['max'] = $this_sunday;
                $form_state['values']['field_date_value']['min'] = $prev_monday;
               
-               
-               
-                $template_start_value = $sunday_calc;
+                $template_start_value = $prev_monday;
             }
             else
             {
-                $this_sunday = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($form_state['values']['field_date_value']['min'])));
-                $sunday_calc =  date($form['field_date_value']["min"]['#date_format'],strtotime($form_state['values']['field_date_value']['min']));
-                $prev_monday =  date($form['field_date_value']["min"]['#date_format'], strtotime($form_state['values']['field_date_value']['min']));
+                $this_sunday = date("Y-m-d",strtotime('this sunday', strtotime($form_state['values']['field_date_value']['min'])));
+                $prev_monday =  date("Y-m-d", strtotime($form_state['values']['field_date_value']['min']));
                 
-                 $form['field_date_value']["min"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime($form_state['values']['field_date_value']['min']));
-                 $form['field_date_value']["max"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime('this sunday', strtotime($sunday_calc)));
+                 $form['field_date_value']["min"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime($prev_monday));
+                 $form['field_date_value']["max"]['date']['#value'] = date($form['field_date_value']["min"]['#date_format'],strtotime($this_sunday));
                 
                  $form_state['values']['field_date_value']['min'] = $prev_monday;
                  $form_state['values']['field_date_value']['max'] = $this_sunday;
                 
-                $template_start_value = $sunday_calc;
+                $template_start_value = $prev_monday;
             }
         }
         $_GET['field_date_value']['value']['date'] = $template_start_value;
@@ -313,6 +295,7 @@ $query->where['1']['conditions'][2]['field'] = "DATE_FORMAT(field_data_field_dat
 //$query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value1']= date('Y-m-d',strtotime($query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value1']));
 unset($query->where['date']);
 $test2 = $query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value1'];
+$test1 = $query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value'];
 $view->argument['date_argument']->max_date =  new DateObject(date("Y-m-d 23:00:00",strtotime($test2)));
 $view->argument['date_argument']->min_date = new DateObject(date("Y-m-d 23:00:00",strtotime($query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value'])));
 }
