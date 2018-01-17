@@ -46,6 +46,7 @@
 div.views-exposed-widget.views-submit-button button {
     width: 24% !important;
     margin-right: 10px;
+    float:left !important;
 }
 .views-submit-button
 {
