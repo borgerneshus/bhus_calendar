@@ -121,7 +121,7 @@ function borgernes_hus_event_calender_views_default_views() {
   $handler->display->display_options['filters']['field_date_value']['id'] = 'field_date_value';
   $handler->display->display_options['filters']['field_date_value']['table'] = 'field_data_field_date';
   $handler->display->display_options['filters']['field_date_value']['field'] = 'field_date_value';
-  $handler->display->display_options['filters']['field_date_value']['operator'] = '>=';
+  $handler->display->display_options['filters']['field_date_value']['operator'] = 'between';
   $handler->display->display_options['filters']['field_date_value']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_date_value']['expose']['operator_id'] = 'field_date_value_op';
   $handler->display->display_options['filters']['field_date_value']['expose']['label'] = 'Fra Dato';
@@ -144,6 +144,7 @@ function borgernes_hus_event_calender_views_default_views() {
   );
   $handler->display->display_options['filters']['field_date_value']['form_type'] = 'date_popup';
   $handler->display->display_options['filters']['field_date_value']['default_date'] = 'monday this week';
+  $handler->display->display_options['filters']['field_date_value']['default_to_date'] = 'sunday this week';
   $handler->display->display_options['filters']['field_date_value']['year_range'] = '-1:+3';
 
   /* Display: Page */

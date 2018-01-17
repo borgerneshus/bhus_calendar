@@ -13,7 +13,7 @@ function borgernes_hus_event_calender_field_default_field_bases() {
   // Exported field_base: 'field_date'.
   $field_bases['field_date'] = array(
     'active' => 1,
-    'cardinality' => 1,
+    'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_date',
@@ -32,9 +32,9 @@ function borgernes_hus_event_calender_field_default_field_bases() {
         'year' => 'year',
       ),
       'repeat' => 1,
-      'timezone_db' => 'UTC',
+      'timezone_db' => '',
       'todate' => 'required',
-      'tz_handling' => 'site',
+      'tz_handling' => 'none',
     ),
     'translatable' => 0,
     'type' => 'datetime',

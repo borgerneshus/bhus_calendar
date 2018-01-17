@@ -39,7 +39,7 @@
 {
     border-top: 5px solid royalblue !important;
 }
-#edit-field-date-value-max-inside-wrapper
+#edit-field-date-value-max-inside-wrapper , .edit-field-date-value-min
 {
     display:none;
 }
