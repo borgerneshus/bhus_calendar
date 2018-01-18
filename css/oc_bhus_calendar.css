@@ -52,6 +52,10 @@ div.views-exposed-widget.views-submit-button button {
 {
     width:100% !important;
 }
+#edit-submit-calendar-prevweek,#edit-submit-calendar-nextweek
+{
+    float:right !important;
+}
 /*
 * Fix hide on intranet
 */
@@ -63,20 +67,28 @@ div.views-exposed-widget.views-submit-button button {
 {
     //display:none;
 }
+
 /*
 * colors for internal events
 */
 .colors-taxonomy-term-Amfitrappen
 {
     background-color:rgb(193, 233, 254) !important;
-    
+    opacity:0.9;
 }
 .colors-taxonomy-term-Borgernes_værksted
 {
     background-color:lightsalmon !important;
-    
+    opacity:0.9;
 }
 .colors-taxonomy-term-Borgernes_Torv
 {
     background-color: lightpink !important;
+    opacity:0.9;
+}
+.colors-taxonomy-term-Udstillingsområde
+{
+    background-color: lightsteelblue !important;
+    opacity: 0.7;
+    z-index: -100;
 }

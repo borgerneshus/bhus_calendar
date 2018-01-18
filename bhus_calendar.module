@@ -3,6 +3,29 @@ function bhus_calendar_init()
 {
     drupal_add_css(drupal_get_path('module', 'bhus_calendar') ."/css/oc_bhus_calendar.css");
 }
+function bhus_calendar_menu() {
+  $items = array();
+  global $user;
+  $node = (object) array('uid' => $user->uid, 'name' => (isset($user->name) ? $user->name : ''), 'type' => 'bhus_events', 'language' => LANGUAGE_NONE);
+  
+  $items['bhus/calendar/form/nodecreate'] = array(
+    'title' => 'Edit this node',
+    'description' => 'Edit this node.',
+    'page callback' => 'bhus_calendar_return_form_ajax',
+    'page arguments' => array('bhus_events_node_form', $node),
+    'file path' => drupal_get_path('module', 'node'),
+    'file' => 'node.pages.inc',
+    'access callback' => TRUE,
+  );
+  
+  return $items;
+}
+function bhus_calendar_return_form_ajax($form,$node)
+{
+    $form = drupal_get_form($form,$node);
+    echo drupal_render($form);
+    drupal_exit();
+}
 function bhus_calendar_calendar_groupby_times_alter(&$times)
 {
    $open_hours = array();
@@ -166,18 +189,19 @@ function bhus_calendar_form_alter(&$form, $form_state) {
           '#value' => "Idag",
           //'#prefix' => '<div class="submit_calendar_thisweek">',
         );
-        $form['submit_calendar_prevweek'] = array
-        (
-          '#type' => 'submit',
-          '#value' => "Tilbage",
-          //'#prefix' => '<div class="submit_calendar_prevweek">',
-        );
         $form['submit_calendar_nextweek'] = array
         (
           '#type' => 'submit',
           '#value' => "Frem",
           //'#prefix' => '<div class="submit_calendar_nextweek">',
         );
+        $form['submit_calendar_prevweek'] = array
+        (
+          '#type' => 'submit',
+          '#value' => "Tilbage",
+          //'#prefix' => '<div class="submit_calendar_prevweek">',
+        );
+       
 
         
     }
@@ -291,13 +315,27 @@ function bhus_calendar_theme_registry_alter(&$theme_registry) {
  */
 function bhus_calendar_views_query_alter(&$view, &$query) {
 if ($view->name == 'bhus_events' && $view->current_display == 'page') {
+if($query->where['1']['conditions'][2]['field'] != "field_data_field_event_location.field_event_location_tid")
+{
 $query->where['1']['conditions'][2]['field'] = "DATE_FORMAT(field_data_field_date.field_date_value, '%Y-%m-%d') >= :field_data_field_date_field_date_value AND DATE_FORMAT(field_data_field_date.field_date_value2, '%Y-%m-%d') <= :field_data_field_date_field_date_value1";
-//$query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value']= date('Y-m-d',strtotime($query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value']));
-//$query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value1']= date('Y-m-d',strtotime($query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value1']));
-unset($query->where['date']);
 $test2 = $query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value1'];
 $test1 = $query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value'];
 $view->argument['date_argument']->max_date =  new DateObject(date("Y-m-d 23:00:00",strtotime($test2)));
-$view->argument['date_argument']->min_date = new DateObject(date("Y-m-d 23:00:00",strtotime($query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value'])));
+$view->argument['date_argument']->min_date = new DateObject(date("Y-m-d 23:00:00",strtotime($test1)));
+
+}
+else
+{
+    $query->where['1']['conditions'][3]['field'] = "DATE_FORMAT(field_data_field_date.field_date_value, '%Y-%m-%d') >= :field_data_field_date_field_date_value AND DATE_FORMAT(field_data_field_date.field_date_value2, '%Y-%m-%d') <= :field_data_field_date_field_date_value1";
+    $test2 = $query->where['1']['conditions'][3]['value'][':field_data_field_date_field_date_value1'];
+$test1 = $query->where['1']['conditions'][3]['value'][':field_data_field_date_field_date_value'];
+$view->argument['date_argument']->max_date =  new DateObject(date("Y-m-d 23:00:00",strtotime($test2)));
+$view->argument['date_argument']->min_date = new DateObject(date("Y-m-d 23:00:00",strtotime($test1)));
+    
+}
+//$query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value']= date('Y-m-d',strtotime($query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value']));
+//$query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value1']= date('Y-m-d',strtotime($query->where['1']['conditions'][2]['value'][':field_data_field_date_field_date_value1']));
+unset($query->where['date']);
+
 }
 }

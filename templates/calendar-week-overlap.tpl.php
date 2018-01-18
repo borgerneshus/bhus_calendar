@@ -130,9 +130,9 @@ foreach ($day_names as $key => $value) {
                     <?php if(!empty($items[$start_time]['values'][$index - 1])) :?>
                       <?php foreach($items[$start_time]['values'][$index - 1] as $item) :?>
                         <?php if (isset($item['is_first']) && $item['is_first']) :?>
-                        <div class="item <?php print $item['class']?> first_item">
+                        <div class="item <?php print $item['class']?> " style="display:inline-block;position">
                         <?php else : ?>
-                        <div class="item <?php print $item['class']?>">
+                        <div class="item <?php print $item['class']?>" style="display:inline-block">
                         <?php endif; ?>
                         <?php print $item['entry'] ?>
                         </div>
@@ -165,3 +165,37 @@ try {
 }
 </script>
 <?php endif; ?>
+<!-- Modal -->
+<div id="event-item-info-modal"  class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Arrangemants informationer</h4>
+      </div>
+      <div class="modal-body">
+        <p>One fine body&hellip;</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<div id="event-item-edit-create-modal"  class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Rediger/Opret Arrangemant</h4>
+      </div>
+      <div class="modal-body">
+        <p>One fine body&hellip;</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
