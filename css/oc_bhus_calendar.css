@@ -92,3 +92,28 @@ div.views-exposed-widget.views-submit-button button {
     opacity: 0.7;
     z-index: -100;
 }
+/*
+* Legend styling
+*/
+.legend-wrap
+{
+    width: 100%;
+    float:left;
+}
+.legend-box
+{
+    width:10px;
+    height: 10px;
+    background-color: grey;
+    display:inline-block;
+    margin-left:5px;
+}
+.legend-box-wrap
+{
+display:inline-block;
+}
+.legend-name
+{
+    display:inline-block;
+    margin-left:5px;
+}

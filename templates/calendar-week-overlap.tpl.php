@@ -23,6 +23,8 @@
  * $max_date_formatted: The maximum date for this calendar in the format YYYY-MM-DD HH:MM:SS.
  * 
  */
+$vocabulary = taxonomy_vocabulary_machine_name_load('event_lokation');
+$terms = entity_load('taxonomy_term', FALSE, array('vid' => $vocabulary->vid));
 $index = 0;
 $start_date =0;
 if(isset($_GET['field_date_value']['value']['date']))
@@ -66,6 +68,16 @@ foreach ($day_names as $key => $value) {
 ?>
 
 <div class="calendar-calendar"><div class="week-view">
+        <div class="legend-wrap">
+  <?php
+  foreach($terms as $term)
+  {
+  ?>
+        <div class="legend-box-wrap"><div class="legend-box <?php echo 'colors-taxonomy-term-' . str_replace(' ','_',$term->name) ?>"></div><span class="legend-name"><?php echo $term->name ?></span></div>     
+  <?php
+  }
+  ?>
+        </div>
   <div id="header-container">
   <table class="full">
   <tbody>
