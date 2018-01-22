@@ -56,6 +56,19 @@ div.views-exposed-widget.views-submit-button button {
 {
     float:right !important;
 }
+.obib-calendar-week-view .time-slice
+{
+    
+}
+.half-hour
+{
+    height: 50%;
+    width: 100%;
+    border-bottom:1px dotted #cccccc;
+    float:left;
+    z-index: 0;
+    padding-left: 5px;
+}
 /*
 * Fix hide on intranet
 */
@@ -116,4 +129,13 @@ display:inline-block;
 {
     display:inline-block;
     margin-left:5px;
+}
+/*
+*
+*/
+.grippie {
+    overflow: hidden;
+    background: #eee url(/misc/grippie.png) no-repeat center 2px;
+    cursor: s-resize;
+    height: 3px;
 }

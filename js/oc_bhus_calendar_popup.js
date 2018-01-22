@@ -16,4 +16,10 @@ jQuery( document ).ready(function($) {
         $('#event-item-info-modal').find('.modal-body').html(body);
         $('#event-item-info-modal').modal('show');
     });
+     $('.item').click(function(e){
+         debugger;
+        var body = $(e.currentTarget).attr("class");
+        $('#event-item-info-modal').find('.modal-body').html(body);
+        $('#event-item-info-modal').modal('show');
+    });
 });

@@ -1,28 +1,4 @@
 <?php
-/**
- * @file
- * Template to display a view as a calendar week with overlapping items
- * 
- * @see template_preprocess_calendar_week.
- *
- * $day_names: An array of the day of week names for the table header.
- * $rows: The rendered data for this week.
- * 
- * For each day of the week, you have:
- * $rows['date'] - the date for this day, formatted as YYYY-MM-DD.
- * $rows['datebox'] - the formatted datebox for this day.
- * $rows['empty'] - empty text for this day, if no items were found.
- * $rows['all_day'] - an array of formatted all day items.
- * $rows['items'] - an array of timed items for the day.
- * $rows['items'][$time_period]['hour'] - the formatted hour for a time period.
- * $rows['items'][$time_period]['ampm'] - the formatted ampm value, if any for a time period.
- * $rows['items'][$time_period]['values'] - An array of formatted items for a time period.
- * 
- * $view: The view.
- * $min_date_formatted: The minimum date for this calendar in the format YYYY-MM-DD HH:MM:SS.
- * $max_date_formatted: The maximum date for this calendar in the format YYYY-MM-DD HH:MM:SS.
- * 
- */
 $vocabulary = taxonomy_vocabulary_machine_name_load('event_lokation');
 $terms = entity_load('taxonomy_term', FALSE, array('vid' => $vocabulary->vid));
 $index = 0;
@@ -64,11 +40,72 @@ foreach ($day_names as $key => $value) {
   $header_ids[$key] = $value['header_id'];
   $day_names[$key]['data'] = $value['header_id'] . " ". $date;
 }
-//dsm('Display: '. $display_type .': '. $min_date_formatted .' to '. $max_date_formatted);
 ?>
-
-<div class="calendar-calendar"><div class="week-view">
-        <div class="legend-wrap">
+<style>
+    .obib-calendar-wraper
+    {
+        width:100%;
+        background-color:white;
+        display:inline-block;
+        color:black;
+        
+    }
+    .obib-calendar-time-slices{       
+        float:left;
+        display:inline-block;
+    }
+    .obib-calendar-time-slices
+    { 
+        margin-right: 5px;
+    }
+    .obib-calendar-time-slices .time-slice{
+         border-top: 1px solid #cccccc;
+         border-right: 1px solid #cccccc;
+    }
+    .obib-calendar-week-view .time-slice
+    {
+        border-bottom: 1px solid #cccccc;
+    }
+    .obib-calendar-time-slices .time-slice , .obib-calendar-week-view .time-slice
+    {
+        
+        height: 50px;
+    }
+    .obib-calendar-week-view{
+        float:left;
+        width: 13.5%;
+        overflow:hidden;
+        margin-right: 5px;
+        margin-bottom:10px;
+    }
+    .item
+    {
+        float:left;
+        margin-right: 3px;
+        margin-left: 3px;
+        opacity: 0.7;
+        width: 10px;
+        background-color:grey;
+    }
+    .item:hover{
+        border: 1px solid black;
+    }
+    .obib-calendar-header
+    {
+        background-color: #eee;
+        color: #777;
+        font-weight: bold;
+        border: 1px solid #ccc;
+        height: 25px;
+        text-align: center;
+    }
+    .obib-calendar-header-filler{
+        height: 27px;
+        width:30px;
+    }
+</style>
+<div class="obib-calendar-wraper">
+    <div class="legend-wrap">
   <?php
   foreach($terms as $term)
   {
@@ -78,105 +115,54 @@ foreach ($day_names as $key => $value) {
   }
   ?>
         </div>
-  <div id="header-container">
-  <table class="full">
-  <tbody>
-    <tr class="holder"><td class="calendar-time-holder"></td><td class="calendar-day-holder"></td><td class="calendar-day-holder"></td><td class="calendar-day-holder"></td><td class="calendar-day-holder"></td><td class="calendar-day-holder"></td><td class="calendar-day-holder"></td><td class="calendar-day-holder"></td><td class="calendar-day-holder margin-right"></td></tr>
-    <tr>
-      <th class="calendar-agenda-hour">&nbsp;</th>
-      <?php foreach ($day_names as $cell): ?>
-        <th class="<?php print $cell['class']; ?>" id="<?php print $cell['header_id']; ?>">
-          <?php print $cell['data']; ?>
-        </th>
-      <?php endforeach; ?>
-      <th class="calendar-day-holder margin-right"></th>
-    </tr>
-  </tbody>
-  </table>
-  </div>
-  <div class="header-body-divider">&nbsp;</div>
-  <div id="single-day-container">
-    <?php if (!empty($scroll_content)) : ?>
-    <script>
-      try {
-        // Hide container while it renders...  Degrade w/o javascript support
-        jQuery('#single-day-container').css('visibility','hidden');
-      }catch(e){ 
-        // swallow 
-      }
-    </script>
-    <?php endif; ?>
-    <table class="full">
-      <tbody>
-        <tr class="holder"><td class="calendar-time-holder"></td><td class="calendar-day-holder"></td><td class="calendar-day-holder"></td><td class="calendar-day-holder"></td><td class="calendar-day-holder"></td><td class="calendar-day-holder"></td><td class="calendar-day-holder"></td><td class="calendar-day-holder"></td></tr>
-        <tr>
-          <?php for ($index = 0; $index < 8; $index++): ?>
-          <?php if ($index == 0 ): ?>
-          <td class="first" headers="<?php print $header_ids[$index]; ?>">
-          <?php elseif ($index == 7 ) : ?>
-          <td class="last">
-          <?php else : ?>
-          <td headers="<?php print $header_ids[$index]; ?>">
-          <?php endif; ?>
+    <div class="obib-calendar">
+        <div class="obib-calendar-time-slices">
+            <div class="obib-calendar-header-filler"></div>
             <?php foreach ($start_times as $time_cnt => $start_time): ?>
-              <?php 
-                if ($time_cnt == 0) {
-                  $class = 'first ';
-                }
-                elseif ($time_cnt == count($start_times) - 1) {
-                  $class = 'last ';
-                }
-                else {
-                  $class = '';
-                } ?>
-              <?php if( $index == 0 ): ?>
-              <?php $time = $items[$start_time];?>
-              <div class="<?php print $class?>calendar-agenda-hour">
-                <span class="calendar-hour"><?php print $time['hour']; ?></span><span class="calendar-ampm"><?php print $time['ampm']; ?></span>
-              </div>
-              <?php else: ?>
-              <div class="<?php print $class?>calendar-agenda-items single-day">
-                <div class="half-hour">&nbsp;</div>
-                <div class="calendar item-wrapper">
-                  <div class="inner">
-                    <?php if(!empty($items[$start_time]['values'][$index - 1])) :?>
-                      <?php foreach($items[$start_time]['values'][$index - 1] as $item) :?>
-                        <?php if (isset($item['is_first']) && $item['is_first']) :?>
-                        <div class="item <?php print $item['class']?> " style="display:inline-block;position">
-                        <?php else : ?>
-                        <div class="item <?php print $item['class']?>" style="display:inline-block">
-                        <?php endif; ?>
-                        <?php print $item['entry'] ?>
-                        </div>
-                      <?php endforeach; ?>
-                    <?php endif; ?>
-                  </div>
-                </div>
-              </div>
-              <?php endif; ?>
+            <?php $time = $items[$start_time]; ?>
+            <div class="time-slice"><?php print $time['hour']; ?></div>
             <?php endforeach;?>
-          </td>
-          <?php endfor;?>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="single-day-footer">&nbsp;</div>
-</div></div>
-<?php if (!empty($scroll_content)) : ?>
-<script>
-try {
-  // Size and position the viewport inline so there are no delays
-  calendar_resizeViewport(jQuery);
-  calendar_scrollToFirst(jQuery);
-
-  // Show it now that it is complete and positioned
-  jQuery('#single-day-container').css('visibility','visible');
-}catch(e){ 
-  // swallow 
-}
-</script>
-<?php endif; ?>
+        </div>
+        <?php for($i = 0;$i< 7;$i++){ ?>
+        <div class="obib-calendar-week-view">
+            <div class="obib-calendar-header">
+                <?php print $day_names[$i]['data']; ?>
+            </div>
+            <div class="grippie"></div>
+            <?php $full_size = 13;$above_items = 0; $margin_index = 0; ?>
+            <?php foreach ($start_times as $time_cnt => $start_time): ?>
+            <?php  $time = $items[$start_time]; ?>
+                <div class="time-slice">
+                    <div class="half-hour">
+                    <?php if(!empty($items[$start_time]['values'][$i])) :?>
+                        <?php foreach($items[$start_time]['values'][$i] as $item) :?>
+                        <?php 
+                        $entity = $item["item"]->entity;
+                        $term = taxonomy_term_load($entity->field_event_location["und"][0]["tid"]);
+                        $color_class = 'colors-taxonomy-term-' . str_replace(' ','_',$term->name);
+                        if($start_time != $start_times[0] && $above_items != 0)
+                        {
+                            $margin_index = $full_size*($above_items+1);
+                        }
+                        $entity_start = strtotime($entity->field_date['und'][0]['value']);
+                        $entity_end = strtotime($entity->field_date['und'][0]['value2']);
+                        $diff = (($entity_end-$entity_start)/3600);
+                        $height = (50)*$diff;
+                        ?>
+                            <div class="item <?php echo $color_class ?>" style="height: <?php echo $height."px"; ?>;margin-left:<?php echo $margin_index."px"; ?>">
+                                
+                            </div>
+                         <?php $above_items++; endforeach;?>
+                    <?php endif;?>
+                    </div>
+                     
+                </div>
+            <?php endforeach;?>
+        </div>
+        <?php } ?>
+        
+    </div>
+</div>
 <!-- Modal -->
 <div id="event-item-info-modal"  class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
