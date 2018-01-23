@@ -100,95 +100,87 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
 </style>
 <div class="obib-calendar-wraper">
     <div class="legend-wrap">
-<?php
-foreach ($terms as $term) {
-    ?>
+        <?php
+        foreach ($terms as $term) {
+            ?>
             <div class="legend-box-wrap"><div class="legend-box <?php echo 'colors-taxonomy-term-' . str_replace(' ', '_', $term->name) ?>"></div><span class="legend-name"><?php echo $term->name ?></span></div>     
-    <?php
-}
-?>
+            <?php
+        }
+        ?>
     </div>
     <div class="obib-calendar">
         <div class="obib-calendar-time-slices">
             <div class="obib-calendar-header-filler"></div>
-        <?php foreach ($start_times as $time_cnt => $start_time): ?>
-            <?php $time = $items[$start_time]; ?>
+            <?php foreach ($start_times as $time_cnt => $start_time): ?>
+                <?php $time = $items[$start_time]; ?>
                 <div class="time-slice"><?php print $time['hour']; ?></div>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
         </div>
         <?php for ($i = 0; $i < 7; $i++) { ?>
             <div class="obib-calendar-week-view">
                 <div class="obib-calendar-header">
-    <?php print $day_names[$i]['data']; ?>
+                    <?php print $day_names[$i]['data']; ?>
                 </div>
                 <div class="grippie"></div>
-                <?php $full_size = 13;
+                <?php
+                $full_size = 13;
                 $above_items = 0;
-                $margin_index = 0; ?>
-                <?php foreach ($start_times as $time_cnt => $start_time): ?>
-                <?php $time = $items[$start_time]; ?>
+                $margin_index = 0;
+                ?>
+    <?php foreach ($start_times as $time_cnt => $start_time): ?>
+                            <?php $time = $items[$start_time]; ?>
                     <div class="time-slice">
                         <div class="half-hour">
-                        <?php if (!empty($items[$start_time]['values'][$i])) : ?>
-                            <?php foreach ($items[$start_time]['values'][$i] as $item) : ?>
-                <?php
-                $entity = $item["item"]->entity;
-                $term = taxonomy_term_load($entity->field_event_location["und"][0]["tid"]);
-                $color_class = 'colors-taxonomy-term-' . str_replace(' ', '_', $term->name);
-                if ($start_time != $start_times[0] && $above_items != 0) {
-                    $margin_index = $full_size * ($above_items + 1);
-                }
-                $entity_start = strtotime($entity->field_date['und'][0]['value']);
-                $entity_end = strtotime($entity->field_date['und'][0]['value2']);
-                $diff = (($entity_end - $entity_start) / 3600);
-                $height = (50) * $diff;
-                ?>
+                            <?php if (!empty($items[$start_time]['values'][$i])) : ?>
+                                <?php foreach ($items[$start_time]['values'][$i] as $item) : ?>
                                     <?php
-                                    $tooltip = "Titel: $entity->title\r\n";
-                                        $tooltip .= isset($entity->body['und'][0]['value']) ? $entity->body['und'][0]['value'] : ""."\r\n";
-                                        $tooltip .= "Kontakt: ".isset($entity->field_kontakt_person['und'][0]['value']) && !empty($entity->field_kontakt_person) ? $entity->field_kontakt_person['und'][0]['value'] : "" ."\r\n";
-                                        $tooltip .= "Dato: " .$start_date ."\r\n";
-                                        $tooltip .= "start: " .$start_date ."\r\n";
-                                        $tooltip .= "slut: " .$start_date ."\r\n";
-                                        $tooltip .= isset($entity->field_vis_p_sk_rm['und'][0]['value']) ? $entity->field_vis_p_sk_rm['und'][0]['value'] : "" ."\r\n";
+                                    $entity = $item["item"]->entity;
+                                    $term = taxonomy_term_load($entity->field_event_location["und"][0]["tid"]);
+                                    $color_class = 'colors-taxonomy-term-' . str_replace(' ', '_', $term->name);
+                                    if ($start_time != $start_times[0] && $above_items != 0) {
+                                        $margin_index = $full_size * ($above_items + 1);
+                                    }
+                                    $entity_start = strtotime($entity->field_date['und'][0]['value']);
+                                    $entity_end = strtotime($entity->field_date['und'][0]['value2']);
+                                    $diff = (($entity_end - $entity_start) / 3600);
+                                    $height = (50) * $diff;
+                                    ?>
+                                    <?php
+                                    $show_screen = (isset($entity->field_vis_p_sk_rm['und'][0]['value']) && !empty($entity->field_vis_p_sk_rm['und'][0]['value']) && $entity->field_vis_p_sk_rm['und'][0]['value'] != 0) ? "Ja" : "Nej";
                                     if (!$is_full_view) {
-                                        
                                         ?>
                                         <div id="<?php echo $entity->nid ?>" data-placement="right" data-trigger="hover" class="item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;margin-left:<?php echo $margin_index . "px"; ?>">
                                             <div class="calendar-item-data" style="display:none;">
-                                                    <input type="hidden" id="item-nid" value="<?php echo $entity->nid ?>" />
-                                                    <div style="width:100%;"><h2><?php echo $entity->title ?></h2></div>
-                                                    <div style="width:100%;"><?php echo date('H:i',strtotime($entity->field_date['und'][0]['value'])) . " - ".date('H:i',strtotime($entity->field_date['und'][0]['value2'])) ?></div>
-                                                    <div style="width:100%;"><?php echo isset($entity->field_kontakt_person['und'][0]['value']) ? "Kontakt: ". $entity->field_kontakt_person['und'][0]['value'] : "" ?></div>
-                                                    <div style="width:100%;"><?php echo isset($entity->body['und'][0]['value']) ? $entity->body['und'][0]['value'] : "" ?></div>
-                                                    <div style="width:100%;"><?php echo isset($entity->field_vis_p_sk_rm['und'][0]['value']) ? "Vis på skærm: " . $entity->field_vis_p_sk_rm['und'][0]['value'] : "" ?></div>
+                                                <input type="hidden" id="item-nid" value="<?php echo $entity->nid ?>" />
+                                                <div style="width:100%;"><h2><?php echo $entity->title ?></h2></div>
+                                                <div style="width:100%;"><?php echo date('H:i', strtotime($entity->field_date['und'][0]['value'])) . " - " . date('H:i', strtotime($entity->field_date['und'][0]['value2'])) ?></div>
+                                                <div style="width:100%;"><?php echo isset($entity->field_kontakt_person['und'][0]['value']) ? "Kontakt: " . $entity->field_kontakt_person['und'][0]['value'] : "" ?></div>
+                                                <div style="width:100%;"><?php echo isset($entity->body['und'][0]['value']) ? $entity->body['und'][0]['value'] : "" ?></div>
+                                                <div style="width:100%;"><?php echo "<br/>Vis på skærm: " . $show_screen ?></div>
                                             </div>
                                         </div>
-                                    <?php } else { ?>
+                <?php } else { ?>
                                         <div id="<?php echo $entity->nid ?>" data-placement="right" data-trigger="hover" class="item full-calendar-item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;width: 100%;">
                                             <div><?php echo $entity->title ?></div>
                                             <div class="calendar-item-data" style="display:none;">
-                                                    <input type="hidden" id="item-nid" value="<?php echo $entity->nid ?>" />
-                                                    <div style="width:100%;"><h2><?php echo $entity->title ?></h2></div>
-                                                    <div style="width:100%;"><?php echo date('H:i',strtotime($entity->field_date['und'][0]['value'])) . " - ".date('H:i',strtotime($entity->field_date['und'][0]['value2'])) ?></div>
-                                                    <div style="width:100%;"><?php echo isset($entity->field_kontakt_person['und'][0]['value']) ? "Kontakt: ". $entity->field_kontakt_person['und'][0]['value'] : "" ?></div>
-                                                    <div style="width:100%;"><?php echo isset($entity->body['und'][0]['value']) ? $entity->body['und'][0]['value'] : "" ?></div>
-                                                    <div style="width:100%;"><?php echo isset($entity->field_vis_p_sk_rm['und'][0]['value']) ? "Vis på skærm: " . $entity->field_vis_p_sk_rm['und'][0]['value'] : "" ?></div>
+                                                <input type="hidden" id="item-nid" value="<?php echo $entity->nid ?>" />
+                                                <div style="width:100%;"><h2><?php echo $entity->title ?></h2></div>
+                                                <div style="width:100%;"><?php echo date('H:i', strtotime($entity->field_date['und'][0]['value'])) . " - " . date('H:i', strtotime($entity->field_date['und'][0]['value2'])) ?></div>
+                                                <div style="width:100%;"><?php echo isset($entity->field_kontakt_person['und'][0]['value']) ? "Kontakt: " . $entity->field_kontakt_person['und'][0]['value'] : "" ?></div>
+                                                <div style="width:100%;"><?php echo isset($entity->body['und'][0]['value']) ? $entity->body['und'][0]['value'] : "" ?></div>
+                                                <div style="width:100%;"><?php echo "<br/>Vis på skærm: " . $show_screen ?></div>
                                             </div>
                                         </div>
-                <?php } ?>
-                <?php $above_items++;
-            endforeach; ?>
+                                    <?php } ?>
+                                    <?php $above_items++;
+                                endforeach;
+                                ?>
         <?php endif; ?>
-
-
                         </div>
-
                     </div>
-    <?php endforeach; ?>
+            <?php endforeach; ?>
             </div>
 <?php } ?>
-
     </div>
 </div>
 

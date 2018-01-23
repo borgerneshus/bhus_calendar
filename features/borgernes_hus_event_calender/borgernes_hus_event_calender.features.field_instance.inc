@@ -50,7 +50,7 @@ function borgernes_hus_event_calender_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 31,
+      'weight' => 3,
     ),
   );
 
@@ -107,7 +107,7 @@ function borgernes_hus_event_calender_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_popup',
-      'weight' => 34,
+      'weight' => 5,
     ),
   );
 
@@ -144,7 +144,90 @@ function borgernes_hus_event_calender_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 33,
+      'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'node-bhus_events-field_kontakt_person'.
+  $field_instances['node-bhus_events-field_kontakt_person'] = array(
+    'bundle' => 'bhus_events',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_kontakt_person',
+    'label' => 'Kontakt person',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance: 'node-bhus_events-field_vis_p_sk_rm'.
+  $field_instances['node-bhus_events-field_vis_p_sk_rm'] = array(
+    'bundle' => 'bhus_events',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 5,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_vis_p_sk_rm',
+    'label' => 'Vis på skærm',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(
+        'display_label' => 1,
+      ),
+      'type' => 'options_onoff',
+      'weight' => 6,
     ),
   );
 
@@ -152,6 +235,8 @@ function borgernes_hus_event_calender_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Body');
   t('Event Location');
+  t('Kontakt person');
+  t('Vis på skærm');
   t('date');
 
   return $field_instances;

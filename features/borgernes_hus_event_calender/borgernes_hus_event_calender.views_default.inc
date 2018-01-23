@@ -130,7 +130,7 @@ function borgernes_hus_event_calender_views_default_views() {
   $handler->display->display_options['filters']['field_event_location_tid']['field'] = 'field_event_location_tid';
   $handler->display->display_options['filters']['field_event_location_tid']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_event_location_tid']['expose']['operator_id'] = 'field_event_location_tid_op';
-  $handler->display->display_options['filters']['field_event_location_tid']['expose']['label'] = 'Event Lokation';
+  $handler->display->display_options['filters']['field_event_location_tid']['expose']['label'] = 'Lokation';
   $handler->display->display_options['filters']['field_event_location_tid']['expose']['operator'] = 'field_event_location_tid_op';
   $handler->display->display_options['filters']['field_event_location_tid']['expose']['identifier'] = 'field_event_location_tid';
   $handler->display->display_options['filters']['field_event_location_tid']['expose']['remember_roles'] = array(
@@ -183,7 +183,7 @@ function borgernes_hus_event_calender_views_default_views() {
     t('Stigende'),
     t('Faldende'),
     t('Alle'),
-    t('Event Lokation'),
+    t('Lokation'),
     t('Fra Dato'),
     t('date -  start date (field_date)'),
     t('Page'),
