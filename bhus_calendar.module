@@ -1,7 +1,7 @@
 <?php
 function bhus_calendar_init()
 {
-    drupal_add_css(drupal_get_path('module', 'bhus_calendar') ."/css/oc_bhus_calendar.css");
+    
 }
 function bhus_calendar_menu() {
   $items = array();
@@ -101,7 +101,11 @@ function HasTimeConflict($node,$dates,$location_tid)
                 {
                     $rrstart =  new DateTime($rrdate);
                     $rrstart->setTimeZone(new DateTimeZone('Europe/Copenhagen'));
-                    $start =  new DateTime($date['value']);
+                    if(isset($date['value']))
+                    {
+                        $start =  new DateTime($date['value']);
+                    }
+                    else { continue;}
                      $start->setTimeZone(new DateTimeZone('Europe/Copenhagen'));
                     $diff = $start->diff($rrstart);
                     //dont compare differnet dates :)
@@ -154,6 +158,16 @@ function HasTimeConflict($node,$dates,$location_tid)
  * Implements hook_preprocess_calendar_item().
  */
 function bhus_calendar_preprocess_calendar_item(&$vars) {
+    drupal_add_css(drupal_get_path('module', 'bhus_calendar') ."/css/oc_bhus_calendar_pillars.css");
+   if(isset($_GET["field_event_location_tid"]) && $_GET["field_event_location_tid"] != "All")
+   {
+       variable_set("bhus_calendar_full_view", true);
+   }
+   else
+   {	  
+      variable_set("bhus_calendar_full_view", false);
+   }
+    
   // This alter used to add a class like into item display.
   $item = $vars['item'];
   $term = taxonomy_term_load($vars['item']->entity->field_event_location["und"][0]["tid"]);
@@ -338,4 +352,9 @@ $view->argument['date_argument']->min_date = new DateObject(date("Y-m-d 23:00:00
 unset($query->where['date']);
 
 }
+}
+function bhus_calendar_views_pre_render(&$view)
+{
+    //check if a param is select , and change render template based on this.
+    $i = 0;
 }

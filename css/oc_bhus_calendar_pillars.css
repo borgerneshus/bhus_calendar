@@ -69,6 +69,12 @@ div.views-exposed-widget.views-submit-button button {
     z-index: 0;
     padding-left: 5px;
 }
+.full-calendar-item
+{
+    padding:10px;
+    text-align: center;
+    border-top: 1px black dashed;
+}
 /*
 * Fix hide on intranet
 */
@@ -80,7 +86,9 @@ div.views-exposed-widget.views-submit-button button {
 {
     //display:none;
 }
-
+.popover-title,.popover-content{
+    color: black;
+}
 /*
 * colors for internal events
 */
