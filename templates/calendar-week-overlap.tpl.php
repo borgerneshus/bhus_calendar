@@ -164,7 +164,7 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                                             </div>
                                         </div>
                 <?php } else { ?>
-                                        <div id="<?php echo $entity->nid ?>" data-placement="right" data-trigger="hover" class="item full-calendar-item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;width: 100%;">
+                                        <div id="<?php echo $entity->nid ?>" data-placement="right" data-trigger="hover" class="item full-calendar-item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;margin-top:<?php echo $margin_top ."px"; ?>;width: 100%;">
                                             <div><?php echo $entity->title ?></div>
                                             <div class="calendar-item-data" style="display:none;">
                                                 <input type="hidden" id="item-nid" value="<?php echo $entity->nid ?>" />
