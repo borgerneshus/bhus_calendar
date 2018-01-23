@@ -37,11 +37,10 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
 <style>
     .obib-calendar-wraper
     {
-        width:95%;
+        width:100%;
         background-color:white;
         display:inline-block;
         color:black;
-        margin-left:25px;
 
     }
     .obib-calendar-time-slices{       
@@ -67,7 +66,7 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
     }
     .obib-calendar-week-view{
         float:left;
-        width: 13.5%;
+        width: 13%;
         overflow:hidden;
         margin-right: 5px;
         margin-bottom:10px;
