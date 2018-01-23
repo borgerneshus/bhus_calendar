@@ -70,6 +70,7 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
         overflow:hidden;
         margin-right: 5px;
         margin-bottom:10px;
+        border: 1px dotted lightgray;
     }
     .item
     {
