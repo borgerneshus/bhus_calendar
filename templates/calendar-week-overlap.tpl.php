@@ -201,7 +201,7 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><?php t("Informationer"); ?></h4>
+                <h4 class="modal-title"><?php echo t("Informationer"); ?></h4>
             </div>
             <div class="modal-body">
                 <p>One fine body&hellip;</p>
