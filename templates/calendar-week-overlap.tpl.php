@@ -176,7 +176,7 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                                             <div class="calendar-item-data" style="display:none;">
                                                 <input type="hidden" id="item-nid" value="<?php echo $entity->nid ?>" />
                                                 <div style="width:100%;"><h2><?php echo $entity->title ?></h2></div>
-                                                <div style="width:100%;"><?php echo date('H:i', strtotime($entity->field_date['und'][0]['value'])) . " - " . date('H:i', strtotime($entity->field_date['und'][0]['value2'])) ?></div>
+                                                <div style="width:100%;"><?php echo "Tid: ".date('H:i', strtotime($entity->field_date['und'][0]['value'])) . " - " . date('H:i', strtotime($entity->field_date['und'][0]['value2'])) ?></div>
                                                 <div style="width:100%;"><?php echo isset($entity->field_kontakt_person['und'][0]['value']) ? "Kontakt: " . $entity->field_kontakt_person['und'][0]['value'] : "" ?></div>
                                                 <div style="width:100%;"><?php echo isset($entity->body[$lang_name][0]['value']) ? $entity->body[$lang_name][0]['value'] : "" ?></div>
                                                 <div style="width:100%;"><?php echo "<br/>Vis på skærm: " . $show_screen ?></div>
