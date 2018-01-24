@@ -10,9 +10,9 @@
 function borgernes_hus_event_calender_user_default_roles() {
   $roles = array();
 
-  // Exported role: Borgerneshus event cordinator.
-  $roles['Borgerneshus event cordinator'] = array(
-    'name' => 'Borgerneshus event cordinator',
+  // Exported role: event planlægger - bhus.
+  $roles['event planlægger - bhus'] = array(
+    'name' => 'event planlægger - bhus',
     'weight' => 3,
   );
 
