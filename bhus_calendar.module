@@ -224,11 +224,11 @@ function bhus_calendar_form_alter(&$form, $form_state) {
     {
         if(isset($_GET['start-time']))
         {
-            //if(strtotime($_GET['start-time']) >= strtotime("now")){
+            if(strtotime($_GET['start-time']) >= strtotime("now")){
                 $form['field_date']['und'][0]['#default_value']['value'] = $_GET['start-time'];
                 //make standard time between start and end 1 hour.
                 $form['field_date']['und'][0]['#default_value']['value2'] = date("Y-m-d H:i:s",strtotime('+1 hour',strtotime($_GET['start-time'])));
-            //}
+            }
         }
         if(isset($_GET["lokations-tid"]))
         {

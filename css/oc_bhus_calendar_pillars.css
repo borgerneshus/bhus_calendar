@@ -111,11 +111,35 @@ div.views-exposed-widget.views-submit-button button {
     background-color: lightpink !important;
     opacity:0.9;
 }
+.colors-taxonomy-term-Gardinrum
+{
+    background-color: paleturquoise !important;
+    opacity: 0.9;
+}
+.colors-taxonomy-term-Musikscenen
+{
+    background-color: tan !important;
+    opacity: 0.9;
+}
+.colors-taxonomy-term-Scene
+{
+    background-color: palegoldenrod !important;
+    opacity: 0.9;
+}
+.colors-taxonomy-term-Store_scene
+{
+    background-color: wheat !important;
+    opacity: 0.9;
+}
+.colors-taxonomy-term-Udstillingsområde_kælder
+{
+    background-color:gainsboro  !important;
+    opacity: 0.9;
+}
 .colors-taxonomy-term-Udstillingsområde
 {
-    background-color: lightsteelblue !important;
-    opacity: 0.7;
-    z-index: -100;
+    background-color:silver  !important;
+    opacity: 0.9;
 }
 /*
 * Legend styling
