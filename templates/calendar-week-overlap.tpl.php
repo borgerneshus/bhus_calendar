@@ -1,4 +1,6 @@
 <?php
+global $language ;
+$lang_name = $language->language ;  
 $vocabulary = taxonomy_vocabulary_machine_name_load('event_lokation');
 $terms = entity_load('taxonomy_term', FALSE, array('vid' => $vocabulary->vid));
 $index = 0;
@@ -137,6 +139,7 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                             <?php if (!empty($items[$start_time]['values'][$i])) : ?>
                                 <?php foreach ($items[$start_time]['values'][$i] as $item) : ?>
                                     <?php
+
                                     $entity = $item["item"]->entity;
                                     $term = taxonomy_term_load($entity->field_event_location["und"][0]["tid"]);
                                     $color_class = 'colors-taxonomy-term-' . str_replace(' ', '_', $term->name);
@@ -163,7 +166,7 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                                                 <div style="width:100%;"><h2><?php echo $entity->title ?></h2></div>
                                                 <div style="width:100%;"><?php echo date('H:i', strtotime($entity->field_date['und'][0]['value'])) . " - " . date('H:i', strtotime($entity->field_date['und'][0]['value2'])) ?></div>
                                                 <div style="width:100%;"><?php echo isset($entity->field_kontakt_person['und'][0]['value']) ? "Kontakt: " . $entity->field_kontakt_person['und'][0]['value'] : "" ?></div>
-                                                <div style="width:100%;"><?php echo isset($entity->body['und'][0]['value']) ? $entity->body['und'][0]['value'] : "" ?></div>
+                                                <div style="width:100%;"><?php echo isset($entity->body[$lang_name][0]['value']) ? $entity->body[$lang_name][0]['value'] : "" ?></div>
                                                 <div style="width:100%;"><?php echo "<br/>Vis på skærm: " . $show_screen ?></div>
                                             </div>
                                         </div>
@@ -175,7 +178,7 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                                                 <div style="width:100%;"><h2><?php echo $entity->title ?></h2></div>
                                                 <div style="width:100%;"><?php echo date('H:i', strtotime($entity->field_date['und'][0]['value'])) . " - " . date('H:i', strtotime($entity->field_date['und'][0]['value2'])) ?></div>
                                                 <div style="width:100%;"><?php echo isset($entity->field_kontakt_person['und'][0]['value']) ? "Kontakt: " . $entity->field_kontakt_person['und'][0]['value'] : "" ?></div>
-                                                <div style="width:100%;"><?php echo isset($entity->body['und'][0]['value']) ? $entity->body['und'][0]['value'] : "" ?></div>
+                                                <div style="width:100%;"><?php echo isset($entity->body[$lang_name][0]['value']) ? $entity->body[$lang_name][0]['value'] : "" ?></div>
                                                 <div style="width:100%;"><?php echo "<br/>Vis på skærm: " . $show_screen ?></div>
                                             </div>
                                         </div>
