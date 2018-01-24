@@ -17,6 +17,12 @@ jQuery( document ).ready(function($) {
    }); 
     $('.item').click(function(e){
         var body = $(e.currentTarget).find('.calendar-item-data').html();
+        var nid = $(e.currentTarget).find('#item-nid').val();
+        var btn =  $(".edit-bhus-event-modal-btn");
+        if( btn != undefined)
+        {
+            btn.attr('href',"/node/" + nid + "/edit");
+        }
         $('#event-item-info-modal').find('.modal-body').html(body);
         $('#event-item-info-modal').modal('show');
     });

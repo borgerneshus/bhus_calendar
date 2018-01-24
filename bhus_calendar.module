@@ -1,7 +1,11 @@
 <?php
 function bhus_calendar_init()
 {
+     global $user;
      drupal_add_css(drupal_get_path('module', 'bhus_calendar') ."/css/oc_bhus_calendar_pillars.css");
+     if(in_array('event planlægger - bhus', array_values($user->roles)) || in_array('administrator', array_values($user->roles))){
+        drupal_add_js(drupal_get_path('module', 'bhus_calendar') ."/js/oc_bhus_calendar_create.js");
+     }
 }
 function bhus_calendar_menu() {
   $items = array();
@@ -214,11 +218,27 @@ function bhus_calendar_form_alter(&$form, $form_state) {
           '#type' => 'submit',
           '#value' => "Tilbage",
           //'#prefix' => '<div class="submit_calendar_prevweek">',
-        );
-       
-
-        
+        );        
     }
+    if($form['#id'] == "bhus-events-node-form")
+    {
+        if(isset($_GET['start-time']))
+        {
+            if(strtotime($_GET['start-time']) >= strtotime("now")){
+                $form['field_date']['und'][0]['#default_value']['value'] = $_GET['start-time'];
+                //make standard time between start and end 1 hour.
+                $form['field_date']['und'][0]['#default_value']['value2'] = date("Y-m-d H:i:s",strtotime('+1 hour',strtotime($_GET['start-time'])));
+            }
+        }
+        if(isset($_GET["lokations-tid"]))
+        {
+            
+        }
+        $form["#submit"][] = "bhus_calendar_node_form_submit";
+    }
+}
+function bhus_calendar_node_form_submit($form, &$form_state) {
+   $_GET['destination'] = "/bhus-events";
 }
 function bhus_calendar_form_validate_custom(&$form, &$form_state) {
     //make sure date selected is start of week.

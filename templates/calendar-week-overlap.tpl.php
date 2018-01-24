@@ -3,6 +3,7 @@ $vocabulary = taxonomy_vocabulary_machine_name_load('event_lokation');
 $terms = entity_load('taxonomy_term', FALSE, array('vid' => $vocabulary->vid));
 $index = 0;
 $start_date = 0;
+global $user;
 if (isset($_GET['field_date_value']['value']['date'])) {
     $index = date('w', strtotime($_GET['field_date_value']['value']['date']));
     $start_date = $_GET['field_date_value']['value']['date'];
@@ -118,6 +119,7 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
         </div>
         <?php for ($i = 0; $i < 7; $i++) { ?>
             <div class="obib-calendar-week-view">
+                <input type="hidden" id="week-view-date" value="<?php echo date('Y-m-d',strtotime($start_date . "+{$i} days")); ?>"/>
                 <div class="obib-calendar-header">
                     <?php print $day_names[$i]['data']; ?>
                 </div>
@@ -130,7 +132,8 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
     <?php foreach ($start_times as $time_cnt => $start_time): ?>
                             <?php $time = $items[$start_time]; ?>
                     <div class="time-slice">
-                        <div class="half-hour">
+                        <input type="hidden" id="time-slice-time" value="<?php echo $start_time ?>" />
+                        <div class="half-hour ">
                             <?php if (!empty($items[$start_time]['values'][$i])) : ?>
                                 <?php foreach ($items[$start_time]['values'][$i] as $item) : ?>
                                     <?php
@@ -201,26 +204,12 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                 <p>One fine body&hellip;</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Rediger</button>
+                <?php if(in_array('event planlægger - bhus', array_values($user->roles)) || in_array('administrator', array_values($user->roles))){ ?>
+                <a class="btn btn-default edit-bhus-event-modal-btn" data-dismiss="modal" >Rediger</a>
+                <?php } ?>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
-<div id="event-item-edit-create-modal"  class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Rediger/Opret Arrangemant</h4>
-            </div>
-            <div class="modal-body">
-                <p>One fine body&hellip;</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
