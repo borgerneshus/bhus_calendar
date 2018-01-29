@@ -176,7 +176,8 @@ function bhus_calendar_preprocess_calendar_item(&$vars) {
   $item = $vars['item'];
   $term = taxonomy_term_load($vars['item']->entity->field_event_location["und"][0]["tid"]);
   $granularity = $vars['item']->granularity;
-  $vars['item']->granularity = 'colors-taxonomy-term-' . str_replace(' ','_',$term->name) . ' ' . $granularity;
+  $better_String = str_replace('.','',str_replace(')','',str_replace('(','',str_replace(' ','_',$term->name))));
+  $vars['item']->granularity = 'colors-taxonomy-term-' . $better_String . ' ' . $granularity;
 
   $item = $vars['item'];
 
