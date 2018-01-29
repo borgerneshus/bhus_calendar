@@ -13,7 +13,7 @@ jQuery( document ).ready(function($) {
     $('option:contains("Scene")').addClass('colors-taxonomy-term-Scene_stuen');
     $('option:contains("Store scene")').addClass('colors-taxonomy-term-Store_scene_café_2_sal');
     $('option:contains("Udstillingsområde (kælder)")').addClass('colors-taxonomy-term-Udstillingsområde_kælder');
-    $('option:contains("Udstillingsområde (stuen)")').addClass('colors-taxonomy-term-Udstillingsområde_stue');
+    $('option:contains("Udstillingsområde (stuen)")').addClass('colors-taxonomy-term-Udstillingsområde_stuen');
     $('label[for=edit-field-date-value-min]').toggle();
 });
 
