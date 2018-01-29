@@ -12,7 +12,7 @@ jQuery( document ).ready(function($) {
          window.location.href = "/node/edit/" +nid;
     });*/
       $('body').mousemove(function(e){
-      window.mouseXPos = e.pageX;
+       window.mouseXPos = e.pageX;
        window.mouseYPos = e.pageY;
    }); 
     $('.item').click(function(e){
@@ -45,9 +45,8 @@ jQuery( document ).ready(function($) {
         // parseInt removes "px"
         
         $(".popover").css("position","absolute");
-        $(".popover").css("top",  (window.mouseYPos)+ "px");
+        $(".popover").css("top",  (window.mouseYPos+10)+ "px");
         $(".popover").css("left",  (window.mouseXPos-96) + "px");
-        
     });
      
 });
