@@ -160,7 +160,7 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                                     $show_screen = (isset($entity->field_vis_p_sk_rm['und'][0]['value']) && !empty($entity->field_vis_p_sk_rm['und'][0]['value']) && $entity->field_vis_p_sk_rm['und'][0]['value'] != 0) ? "Ja" : "Nej";
                                     if (!$is_full_view) {
                                         ?>
-                                        <div id="<?php echo $entity->nid ?>" data-placement="right" data-trigger="hover" class="item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;margin-top:<?php echo $margin_top ."px"; ?>;margin-left:<?php echo $margin_index . "px"; ?>">
+                                        <div id="<?php echo $entity->nid ?>"  class="item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;margin-top:<?php echo $margin_top ."px"; ?>;margin-left:<?php echo $margin_index . "px"; ?>">
                                             <div class="calendar-item-data" style="display:none;">
                                                 <input type="hidden" id="item-nid" value="<?php echo $entity->nid ?>" />
                                                 <div style="width:100%;"><h2><?php echo $entity->title ?></h2></div>
@@ -171,7 +171,7 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                                             </div>
                                         </div>
                 <?php } else { ?>
-                                        <div id="<?php echo $entity->nid ?>" data-placement="right" data-trigger="hover" class="item full-calendar-item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;margin-top:<?php echo $margin_top ."px"; ?>;width: 100%;">
+                                        <div id="<?php echo $entity->nid ?>"  class="item full-calendar-item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;margin-top:<?php echo $margin_top ."px"; ?>;width: 100%;">
                                             <div><?php echo $entity->title ?></div>
                                             <div class="calendar-item-data" style="display:none;">
                                                 <input type="hidden" id="item-nid" value="<?php echo $entity->nid ?>" />
