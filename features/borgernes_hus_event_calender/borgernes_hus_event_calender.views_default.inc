@@ -28,7 +28,7 @@ function borgernes_hus_event_calender_views_default_views() {
   $handler->display->display_options['access']['type'] = 'role';
   $handler->display->display_options['access']['role'] = array(
     3 => '3',
-    4 => '4',
+    5 => '5',
   );
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
@@ -71,7 +71,7 @@ function borgernes_hus_event_calender_views_default_views() {
   $handler->display->display_options['fields']['nid']['label'] = '';
   $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['nid']['element_wrapper_class'] = 'js-hide calendar-item-nid';
-  /* Felt: Indhold: Event Location */
+  /* Felt: Indhold: Sted */
   $handler->display->display_options['fields']['field_event_location']['id'] = 'field_event_location';
   $handler->display->display_options['fields']['field_event_location']['table'] = 'field_data_field_event_location';
   $handler->display->display_options['fields']['field_event_location']['field'] = 'field_event_location';
@@ -124,7 +124,7 @@ function borgernes_hus_event_calender_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'bhus_events' => 'bhus_events',
   );
-  /* Filterkriterie: Indhold: Event Location (field_event_location) */
+  /* Filterkriterie: Indhold: Sted (field_event_location) */
   $handler->display->display_options['filters']['field_event_location_tid']['id'] = 'field_event_location_tid';
   $handler->display->display_options['filters']['field_event_location_tid']['table'] = 'field_data_field_event_location';
   $handler->display->display_options['filters']['field_event_location_tid']['field'] = 'field_event_location_tid';

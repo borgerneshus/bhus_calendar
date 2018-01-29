@@ -166,7 +166,7 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                                                 <div style="width:100%;"><h2><?php echo $entity->title ?></h2></div>
                                                 <div style="width:100%;"><?php echo "<b>Tid</b>: ".date('H:i', strtotime($entity->field_date['und'][0]['value'])) . " - " . date('H:i', strtotime($entity->field_date['und'][0]['value2'])) ?></div>
                                                 <div style="width:100%;"><?php echo isset($entity->field_kontakt_person['und'][0]['value']) ? "<b>Kontakt</b>: " . $entity->field_kontakt_person['und'][0]['value'] : "" ?></div>
-                                                <div style="width:100%;"><?php echo isset($entity->field_email['und'][0]['value']) ? "<b>Email</b>: " . $entity->field_email['und'][0]['value'] : "" ?></div>
+                                                <div style="width:100%;"><?php echo isset($entity->field_email['und'][0]['value']) ? "<b>Email</b>: <a href='mailto:".$entity->field_email['und'][0]['value']."'>" . $entity->field_email['und'][0]['value'] . "</a>" : "" ?></div>
                                                 <div style="width:100%;"><?php echo isset($entity->field_telefon['und'][0]['value']) ? "<b>Telefon</b>: " . $entity->field_telefon['und'][0]['value'] : "" ?></div>
                                                 <div style="width:100%;"><?php echo isset($entity->body[$lang_name][0]['value']) ? $entity->body[$lang_name][0]['value'] : "" ?></div>
                                                 <div style="width:100%;"><?php echo "<br/><b>Vis på skærm</b>: " . $show_screen ?></div>
@@ -180,7 +180,7 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                                                 <div style="width:100%;"><h2><?php echo $entity->title ?></h2></div>
                                                 <div style="width:100%;"><?php echo "<b>Tid</b>: ".date('H:i', strtotime($entity->field_date['und'][0]['value'])) . " - " . date('H:i', strtotime($entity->field_date['und'][0]['value2'])) ?></div>
                                                 <div style="width:100%;"><?php echo isset($entity->field_kontakt_person['und'][0]['value']) ? "<b>Kontakt</b>: " . $entity->field_kontakt_person['und'][0]['value'] : "" ?></div>
-                                                <div style="width:100%;"><?php echo isset($entity->field_email['und'][0]['value']) ? "<b>Email</b>: " . $entity->field_email['und'][0]['value'] : "" ?></div>
+                                                <div style="width:100%;"><?php echo isset($entity->field_email['und'][0]['value']) ? "<b>Email</b>: <a href='mailto:".$entity->field_email['und'][0]['value']."'>" . $entity->field_email['und'][0]['value'] . "</a>" : "" ?></div>
                                                 <div style="width:100%;"><?php echo isset($entity->field_telefon['und'][0]['value']) ? "<b>Telefon</b>: " . $entity->field_telefon['und'][0]['value'] : "" ?></div>
                                                 <div style="width:100%;"><?php echo isset($entity->body[$lang_name][0]['value']) ? $entity->body[$lang_name][0]['value'] : "" ?></div>
                                                 <div style="width:100%;"><?php echo "<br/><b>Vis på skærm</b>: " . $show_screen ?></div>
