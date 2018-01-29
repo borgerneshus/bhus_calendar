@@ -207,7 +207,7 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                 <p>One fine body&hellip;</p>
             </div>
             <div class="modal-footer">
-                <?php if(in_array('event planlægger - bhus', array_values($user->roles)) || in_array('administrator', array_values($user->roles))){ ?>
+                <?php if(in_array('Borgerneshus event cordinator', array_values($user->roles)) || in_array('administrator', array_values($user->roles))){ ?>
                 <a class="btn btn-default edit-bhus-event-modal-btn" >Rediger</a>
                 <?php } ?>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
