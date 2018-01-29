@@ -5,7 +5,7 @@ function bhus_calendar_init()
      drupal_add_css(drupal_get_path('module', 'bhus_calendar') ."/css/oc_bhus_calendar_pillars.css");
      if(in_array('event planlægger - bhus', array_values($user->roles)) || in_array('administrator', array_values($user->roles))){
         drupal_add_js(drupal_get_path('module', 'bhus_calendar') ."/js/oc_bhus_calendar_create.js");
-        drupal_clear_js_cache()
+        drupal_clear_js_cache();
      }
 }
 function bhus_calendar_menu() {
