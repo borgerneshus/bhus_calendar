@@ -48,6 +48,10 @@ function bhus_calendar_calendar_groupby_times_alter(&$times)
    $open_hours[] = "20:00:00";
    $open_hours[] = "21:00:00";
    $open_hours[] = "22:00:00";
+   $open_hours[] = "23:00:00";
+   $open_hours[] = "00:00:00";
+   $open_hours[] = "01:00:00";
+   
    $times = $open_hours;
         
 }
@@ -378,4 +382,30 @@ function bhus_calendar_views_pre_render(&$view)
 {
     //check if a param is select , and change render template based on this.
     $i = 0;
+}
+function handle_multiday_spill_over(&$items,$rows)
+{
+    $buckets = $rows["multiday_buckets"];
+    foreach($buckets as $i => $bucket)
+    {
+        foreach($bucket as $j => $item)
+        {
+            if(isset($item["item"]->calendar_start))
+            {
+                $start_time = $item["item"]->calendar_start;
+                $end_time = $item["item"]->calendar_end;
+                
+                $hour_start = date("H:00:00",strtotime($start_time));
+                
+                $midnigth_end = date('Y-m-d 23:59:59',strtotime($start_time));
+                $midnigth_start = date('Y-m-d 00:00:00',strtotime($start_time));
+
+                $number_of_days = 0;
+                //$item["item"]->calendar_end = $midnigth_end;
+                array_push($items[$hour_start]['values'][$item['wday']], $item);
+                
+            }
+            
+        }
+    }
 }

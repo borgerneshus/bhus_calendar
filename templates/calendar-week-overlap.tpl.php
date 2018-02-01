@@ -1,4 +1,5 @@
 <?php
+handle_multiday_spill_over($items,$rows);
 global $language ;
 $lang_name = $language->language ;  
 $vocabulary = taxonomy_vocabulary_machine_name_load('event_lokation');
@@ -132,7 +133,7 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                 $margin_index = 0;
                 ?>
     <?php foreach ($start_times as $time_cnt => $start_time): ?>
-                            <?php $time = $items[$start_time]; ?>
+                            <?php $time = isset($items[$start_time]) ? $items[$start_time]: null; ?>
                     <div class="time-slice">
                         <input type="hidden" id="time-slice-time" value="<?php echo $start_time ?>" />
                         <div class="half-hour ">
