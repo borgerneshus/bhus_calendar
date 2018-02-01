@@ -402,10 +402,15 @@ function handle_multiday_spill_over(&$items,$rows)
 
                 $number_of_days = 0;
                 //$item["item"]->calendar_end = $midnigth_end;
+                if(!isset($items[$hour_start]['values'][$item['wday']]))
+                {
+                    $items[$hour_start]['values'][$item['wday']] = array();
+                }
                 array_push($items[$hour_start]['values'][$item['wday']], $item);
                 
             }
             
         }
     }
+    return $items;
 }
