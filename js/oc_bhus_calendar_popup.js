@@ -38,7 +38,8 @@ jQuery( document ).ready(function($) {
                 },
                 trigger: "hover",
                 container: 'body',
-                template: '<div class="popover my-popover" role="tooltip"><div class=""></div><div class="popover-content"></div></div>'
+                template: '<div class="popover my-popover" role="tooltip"><div class=""></div><div class="popover-content"></div></div>',
+                boundary: 'viewport',
             });
     });
      $(".item").on('shown.bs.popover ', function(){
