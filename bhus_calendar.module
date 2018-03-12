@@ -101,8 +101,20 @@ function HasTimeConflict($node,$dates,$location_tid)
            {
                $n = node_load($data->nid);
                $rrule = $n->field_date["und"][0]["rrule"];
+               $rrdates = null;
+               if($rrule == null)
+               {
+                   //array(1) (
+                   //   [0] => (string) 2018-03-12 08:00:00
+                   //   )
+                   $rrdates = array($n->field_date["und"][0]["value"]);
+               }
+               else
+               {
+                   $rrdates =  _date_repeat_calc($rrule, $n->field_date["und"][0]['value'], null, array(), "Europe/Berlin", array());
+               }
                //calculate the event dates and check if they overlap with ours ?
-               $rrdates =  _date_repeat_calc($rrule, $n->field_date["und"][0]['value'], null, array(), "Europe/Berlin", array());
+               
                foreach($dates as $date)
                {
                 foreach($rrdates as $rrdate)
@@ -126,8 +138,22 @@ function HasTimeConflict($node,$dates,$location_tid)
                     /*
                      * is there any conflicts ? 
                      */
-                    $rrend =  new DateTime($rrdate);
-                    $rrend->setTime($Hour,$Minute);
+                    $date_compare = date_format(date_create($n->field_date["und"][0]["value"]), 'Y-m-d');
+                    $date_compare1 = date_format(date_create($n->field_date["und"][0]["value2"]), 'Y-m-d');
+                    
+                    $rrend = null;
+                    if(strcmp($date_compare,$date_compare1) != 0)
+                    {
+                        $diff = dateDifference($date_compare,$date_compare1);
+                        $rrend =  new DateTime($rrdate);
+                        $rrend->add(new DateInterval('P'.$diff.'D'));
+                        $rrend->setTime($Hour,$Minute);
+                    }
+                    else
+                    {
+                        $rrend =  new DateTime($rrdate);
+                        $rrend->setTime($Hour,$Minute);
+                    }
                     $rrend->setTimeZone(new DateTimeZone('Europe/Copenhagen'));
                     
                     $end =  new DateTime($date['value2']);
@@ -154,6 +180,11 @@ function HasTimeConflict($node,$dates,$location_tid)
                          array_push($conflicts,"Konflikt(overlap) ".$node->title.": " . $start->format("d-m-Y H:i") . " - " .$end->format("H:i"). " / " .$rrstart->format("d-m-Y H:i") . " - " .$rrend->format("H:i"));
                          continue;
                     }
+                    else if($start < $rrstart && $end > $rrstart && $end >  $rrend)
+                    {
+                        array_push($conflicts,"Konflikt(overlap) ".$node->title.": " . $start->format("d-m-Y H:i") . " - " .$end->format("d-m-Y H:i"). " / " .$rrstart->format("d-m-Y H:i") . " - " .$rrend->format("d-m-Y H:i"));
+                        continue;
+                    }
                 }
                }
            }
@@ -161,6 +192,13 @@ function HasTimeConflict($node,$dates,$location_tid)
        }
      
       return $conflicts;
+}
+/*
+ * used when the event is a non repeating event
+ */
+function has_time_conflict_none_repeat($date)
+{
+    
 }
 /**
  * Implements hook_preprocess_calendar_item().
@@ -413,4 +451,14 @@ function handle_multiday_spill_over(&$items,$rows)
         }
     }
     return $items;
+}
+function dateDifference($date_1 , $date_2 , $differenceFormat = '%a' )
+{
+    $datetime1 = date_create($date_1);
+    $datetime2 = date_create($date_2);
+    
+    $interval = date_diff($datetime1, $datetime2);
+    
+    return $interval->format($differenceFormat);
+    
 }
