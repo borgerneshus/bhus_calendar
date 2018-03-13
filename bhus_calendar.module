@@ -162,7 +162,7 @@ function HasTimeConflict($node,$dates,$location_tid)
                     //time is in an event slot
                     if($rrstart < $start && $rrend > $end)
                     {
-                        array_push($conflicts, "Konflikt(Inden for event) ".$node->title.": " . $start->format("d-m-Y H:i") . " - " .$end->format("H:i"). " / " .$rrstart->format("d-m-Y H:i") . " - " .$rrend->format("H:i"));
+                        array_push($conflicts, "Konflikt(Inden for event: .".$n->title.") ".$node->title.": " . $start->format("d-m-Y H:i") . " - " .$end->format("H:i"). " / " .$rrstart->format("d-m-Y H:i") . " - " .$rrend->format("H:i"));
                         continue;
                     } //it ends inside a event
                     else if($rrstart < $start && $rrend > $start)
