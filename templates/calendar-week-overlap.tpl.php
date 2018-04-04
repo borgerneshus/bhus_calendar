@@ -132,20 +132,19 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                 $above_items = 0;
                 $margin_index = 0;
                 ?>
-    <?php foreach ($start_times as $time_cnt => $start_time): ?>
+                <?php foreach ($start_times as $time_cnt => $start_time): ?>
                             <?php $time = isset($items[$start_time]) ? $items[$start_time]: null; ?>
                     <div class="time-slice">
                         <input type="hidden" id="time-slice-time" value="<?php echo $start_time ?>" />
                         <div class="half-hour ">
                             <?php if (!empty($items[$start_time]['values'][$i])) : ?>
-                                <?php foreach ($items[$start_time]['values'][$i] as $item) : ?>
+                                <?php foreach ($items[$start_time]['values'][$i] as $index => $item) : ?>
                                     <?php
-
                                     $entity = $item["item"]->entity;
                                     $term = taxonomy_term_load($entity->field_event_location["und"][0]["tid"]);
                                     $color_class = 'colors-taxonomy-term-' . str_replace('.','',str_replace(')','',str_replace('(','',str_replace(' ','_',$term->name))));
                                     if ($start_time != $start_times[0] && $above_items != 0) {
-                                        $margin_index = $full_size * ($above_items + 1);
+                                        $margin_index = $full_size * ($above_items+1 );
                                     }
                                     $entity_start = strtotime($entity->field_date['und'][0]['value']);
                                     $entity_end = strtotime($entity->field_date['und'][0]['value2']);
@@ -160,8 +159,20 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                                     <?php
                                     $show_screen = (isset($entity->field_vis_p_sk_rm['und'][0]['value']) && !empty($entity->field_vis_p_sk_rm['und'][0]['value']) && $entity->field_vis_p_sk_rm['und'][0]['value'] != 0) ? "Ja" : "Nej";
                                     if (!$is_full_view) {
+                                        if($index == 0)
+                                        {
                                         ?>
-                                        <div id="<?php echo $entity->nid ?>"  class="item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;margin-top:<?php echo $margin_top ."px"; ?>;margin-left:<?php echo $margin_index . "px"; ?>">
+                                            <div id="<?php echo $entity->nid ?>"  class="item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;margin-top:<?php echo $margin_top ."px"; ?>;margin-left:<?php echo $margin_index . "px"; ?>">
+                                        <?php
+                                        }
+                                        else
+                                        {
+                                            ?>
+                                           <div id="<?php echo $entity->nid ?>"  class="item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;margin-top:<?php echo $margin_top ."px"; ?>;">     
+                                           <?php 
+                                        }
+                                        ?>
+                                       
                                             <div class="calendar-item-data" style="display:none;">
                                                 <input type="hidden" id="item-nid" value="<?php echo $entity->nid ?>" />
                                                 <div style="width:100%;"><h2><?php echo $entity->title ?></h2></div>
