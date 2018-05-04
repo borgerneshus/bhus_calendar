@@ -111,7 +111,13 @@ function HasTimeConflict($node,$dates,$location_tid)
                }
                else
                {
-                   $rrdates =  _date_repeat_calc($rrule, $n->field_date["und"][0]['value'], null, array(), "Europe/Copenhagen", array());
+                   $rrule_parsed = date_ical_parse_rrule('RRULE:', $rrule);
+                   $end_date = null;
+                   if(isset($rrule_parsed["UNTIL"]))
+                   {
+                       $end_date = $rrule_parsed["UNTIL"]['datetime'];
+                   }
+                   $rrdates =  _date_repeat_calc($rrule, $n->field_date["und"][0]['value'], $end_date, array(), "Europe/Copenhagen", array());
                }
                //calculate the event dates and check if they overlap with ours ?
                
@@ -165,7 +171,7 @@ function HasTimeConflict($node,$dates,$location_tid)
                         array_push($conflicts, "Konflikt(Inden for event: ".$n->title.":".$n->nid.") ".$node->title.": " . $start->format("d-m-Y H:i") . " - " .$end->format("H:i"). " / " .$rrstart->format("d-m-Y H:i") . " - " .$rrend->format("H:i"));
                         continue;
                     } //it ends inside a event
-                    else if($rrstart <= $start && $rrend >= $start)
+                    else if($rrstart < $start && $rrend > $start)
                     {
                          array_push($conflicts, "Konflikt(Starter i andet event:".$n->title.":".$n->nid.") ".$node->title.": " . $start->format("d-m-Y H:i") . " - " .$end->format("H:i"). " / " .$rrstart->format("d-m-Y H:i") . " - " .$rrend->format("H:i"));
                          continue;
@@ -175,12 +181,12 @@ function HasTimeConflict($node,$dates,$location_tid)
                          array_push($conflicts,"Konflikt(slutter i andet event:".$n->title.":".$n->nid.") ".$node->title.": " . $start->format("d-m-Y H:i") . " - " .$end->format("H:i"). " / " .$rrstart->format("d-m-Y H:i") . " - " .$rrend->format("H:i"));
                          continue;
                     }
-                    else if($start <= $rrend && $end >= $rrend)
+                    else if($start < $rrend && $end > $rrend)
                     {
                          array_push($conflicts,"Konflikt(overlap:".$n->title.":".$n->nid.") ".$node->title.": " . $start->format("d-m-Y H:i") . " - " .$end->format("H:i"). " / " .$rrstart->format("d-m-Y H:i") . " - " .$rrend->format("H:i"));
                          continue;
                     }
-                    else if($start <= $rrstart && $end >= $rrstart && $end >=  $rrend)
+                    else if($start < $rrstart && $end > $rrstart && $end >  $rrend)
                     {
                         array_push($conflicts,"Konflikt(overlap) ".$node->title.":".$n->nid.": " . $start->format("d-m-Y H:i") . " - " .$end->format("d-m-Y H:i"). " / " .$rrstart->format("d-m-Y H:i") . " - " .$rrend->format("d-m-Y H:i"));
                         continue;
