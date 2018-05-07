@@ -56,7 +56,7 @@ function bhus_calendar_calendar_groupby_times_alter(&$times)
         
 }
 function bhus_calendar_node_validate($node, $form, &$form_state) {
-  if ($node->type =="bhus_events" ) {
+  if ($node->type =="bhus_events" && $form_state['clicked_button']['#id'] != 'edit-delete' ) {
         $conflicts = array();
        $conflicts = HasTimeConflict($node,$form_state["values"]["field_date"]["und"],$form_state["values"]["field_event_location"]["und"][0]["tid"]);
 
