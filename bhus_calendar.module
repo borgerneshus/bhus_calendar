@@ -91,8 +91,13 @@ function HasTimeConflict($node,$dates,$location_tid)
        $query->entityCondition('entity_type', 'node')
       ->entityCondition('bundle', 'bhus_events')
       ->propertyCondition('status', 1)
-      ->propertyCondition('nid', $node->nid , "!=")
       ->fieldCondition('field_event_location', 'tid', $location_tid, '=');
+       if($node->nid != null)
+       {
+           $query->propertyCondition('nid', $node->nid , "!=");
+       }
+      
+      
        $result = $query->execute();
        
        if(sizeof($result) != 0)
