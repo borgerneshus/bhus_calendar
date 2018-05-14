@@ -97,7 +97,6 @@ function HasTimeConflict($node,$dates,$location_tid)
            $query->propertyCondition('nid', $node->nid , "!=");
        }
       
-      
        $result = $query->execute();
        
        if(sizeof($result) != 0)
@@ -204,13 +203,6 @@ function HasTimeConflict($node,$dates,$location_tid)
      
       return $conflicts;
 }
-/*
- * used when the event is a non repeating event
- */
-function has_time_conflict_none_repeat($date)
-{
-    
-}
 /**
  * Implements hook_preprocess_calendar_item().
  */
@@ -284,10 +276,7 @@ function bhus_calendar_form_alter(&$form, $form_state) {
                 $form['field_date']['und'][0]['#default_value']['value2'] = date("Y-m-d H:i:s",strtotime('+1 hour',strtotime($_GET['start-time'])));
             }
         }
-        if(isset($_GET["lokations-tid"]))
-        {
-            
-        }
+        $form['#attached']['js'][] = drupal_get_path('module', 'bhus_calendar') . '/js/bhus_events_node_form.js';
         $form["#submit"][] = "bhus_calendar_node_form_submit";
     }
 }
