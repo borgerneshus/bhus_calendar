@@ -1,3 +1,7 @@
+.main-container
+{
+    width:100% !important;
+}
 .calendar-calendar .week-view .full div.single-day div.weekview, .calendar-calendar .day-view .full div.single-day div.dayview
 {
     background-color:rgb(193, 233, 254);

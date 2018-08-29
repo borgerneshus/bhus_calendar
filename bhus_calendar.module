@@ -2,7 +2,7 @@
 function bhus_calendar_init()
 {
      global $user;
-     drupal_add_css(drupal_get_path('module', 'bhus_calendar') ."/css/oc_bhus_calendar_pillars.css");
+     
      if(in_array('Borgerneshus event cordinator', array_values($user->roles)) || in_array('administrator', array_values($user->roles))){
         drupal_add_js(drupal_get_path('module', 'bhus_calendar') ."/js/oc_bhus_calendar_create.js");
      }
@@ -32,6 +32,7 @@ function bhus_calendar_return_form_ajax($form,$node)
 }
 function bhus_calendar_calendar_groupby_times_alter(&$times)
 {
+   drupal_add_css(drupal_get_path('module', 'bhus_calendar') ."/css/oc_bhus_calendar_pillars.css");
    $open_hours = array();
    $open_hours[] = "08:00:00";
    $open_hours[] = "09:00:00";
