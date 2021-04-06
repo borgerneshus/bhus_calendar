@@ -1,7 +1,7 @@
 <?php
-handle_multiday_spill_over($items,$rows);
-global $language ;
-$lang_name = $language->language ;  
+handle_multiday_spill_over($items, $rows);
+global $language;
+$lang_name = $language->language;
 $vocabulary = taxonomy_vocabulary_machine_name_load('event_lokation');
 $terms = entity_load('taxonomy_term', FALSE, array('vid' => $vocabulary->vid));
 $index = 0;
@@ -28,7 +28,7 @@ $header_ids = array();
 foreach ($day_names as $key => $value) {
     $date1 = strtotime($start_date . "+{$key} days");
     if (($key + 1) == $today_index && $date1 == strtotime('today')) {
-        $day_names[$key]['class'] .=" date-today ";
+        $day_names[$key]['class'] .= " date-today ";
     }
 
     $date = date('d/m', strtotime($start_date . "+{$key} days"));
@@ -39,57 +39,61 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
 ?>
 
 <style>
-    .obib-calendar-wraper
-    {
-        width:100%;
-        background-color:white;
-        display:inline-block;
-        color:black;
+    .obib-calendar-wraper {
+        width: 100%;
+        background-color: white;
+        display: inline-block;
+        color: black;
 
     }
-    .obib-calendar-time-slices{       
-        float:left;
-        display:inline-block;
+
+    .obib-calendar-time-slices {
+        float: left;
+        display: inline-block;
     }
-    .obib-calendar-time-slices
-    { 
+
+    .obib-calendar-time-slices {
         margin-right: 5px;
     }
-    .obib-calendar-time-slices .time-slice{
+
+    .obib-calendar-time-slices .time-slice {
         border-top: 1px solid #cccccc;
         border-right: 1px solid #cccccc;
     }
-    .obib-calendar-week-view .time-slice
-    {
+
+    .obib-calendar-week-view .time-slice {
         border-bottom: 1px solid #cccccc;
     }
-    .obib-calendar-time-slices .time-slice , .obib-calendar-week-view .time-slice
-    {
+
+    .obib-calendar-time-slices .time-slice,
+    .obib-calendar-week-view .time-slice {
 
         height: 50px;
     }
-    .obib-calendar-week-view{
-        float:left;
+
+    .obib-calendar-week-view {
+        float: left;
         width: 13%;
-        overflow:hidden;
+        overflow: hidden;
         margin-right: 5px;
-        margin-bottom:10px;
+        margin-bottom: 10px;
         border: 1px dotted lightgray;
     }
-    .item
-    {
-        float:left;
+
+    .item {
+        float: left;
         margin-right: 3px;
         margin-left: 3px;
         opacity: 0.7;
         width: 10px;
-        background-color:grey;
+        background-color: grey;
     }
-    .item:hover{
+
+    .item:hover {
         border: 1px solid black;
     }
-    .obib-calendar-header
-    {
+
+    .obib-calendar-header {
         background-color: #eee;
         color: #777;
         font-weight: bold;
@@ -97,32 +101,35 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
         height: 25px;
         text-align: center;
     }
-    .obib-calendar-header-filler{
+
+    .obib-calendar-header-filler {
         height: 27px;
-        width:30px;
+        width: 30px;
     }
 </style>
 <div class="obib-calendar-wraper">
     <div class="legend-wrap">
         <?php
         foreach ($terms as $term) {
-            ?>
-            <div class="legend-box-wrap"><div class="legend-box <?php echo 'colors-taxonomy-term-' . str_replace('.','',str_replace(')','',str_replace('(','',str_replace(' ','_',$term->name)))) ?>"></div><span class="legend-name"><?php echo $term->name ?></span></div>     
-            <?php
+        ?>
+            <div class="legend-box-wrap">
+                <div class="legend-box <?php echo 'colors-taxonomy-term-' . str_replace('.', '', str_replace(')', '', str_replace('(', '', str_replace(' ', '_', $term->name)))) ?>"></div><span class="legend-name"><?php echo $term->name ?></span>
+            </div>
+        <?php
         }
         ?>
     </div>
     <div class="obib-calendar">
         <div class="obib-calendar-time-slices">
             <div class="obib-calendar-header-filler"></div>
-            <?php foreach ($start_times as $time_cnt => $start_time): ?>
+            <?php foreach ($start_times as $time_cnt => $start_time) : ?>
                 <?php $time = $items[$start_time]; ?>
                 <div class="time-slice"><?php print $time['hour']; ?></div>
             <?php endforeach; ?>
         </div>
         <?php for ($i = 0; $i < 7; $i++) { ?>
             <div class="obib-calendar-week-view">
-                <input type="hidden" id="week-view-date" value="<?php echo date('Y-m-d',strtotime($start_date . "+{$i} days")); ?>"/>
+                <input type="hidden" id="week-view-date" value="<?php echo date('Y-m-d', strtotime($start_date . "+{$i} days")); ?>" />
                 <div class="obib-calendar-header">
                     <?php print $day_names[$i]['data']; ?>
                 </div>
@@ -132,8 +139,8 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                 $above_items = 0;
                 $margin_index = 0;
                 ?>
-                <?php foreach ($start_times as $time_cnt => $start_time): ?>
-                            <?php $time = isset($items[$start_time]) ? $items[$start_time]: null; ?>
+                <?php foreach ($start_times as $time_cnt => $start_time) : ?>
+                    <?php $time = isset($items[$start_time]) ? $items[$start_time] : null; ?>
                     <div class="time-slice">
                         <input type="hidden" id="time-slice-time" value="<?php echo $start_time ?>" />
                         <div class="half-hour ">
@@ -142,9 +149,9 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                                     <?php
                                     $entity = $item["item"]->entity;
                                     $term = taxonomy_term_load($entity->field_event_location["und"][0]["tid"]);
-                                    $color_class = 'colors-taxonomy-term-' . str_replace('.','',str_replace(')','',str_replace('(','',str_replace(' ','_',$term->name))));
+                                    $color_class = 'colors-taxonomy-term-' . str_replace('.', '', str_replace(')', '', str_replace('(', '', str_replace(' ', '_', $term->name))));
                                     if ($start_time != $start_times[0] && $above_items != 0) {
-                                        $margin_index = $full_size * ($above_items+1 );
+                                        $margin_index = $full_size * ($above_items + 1);
                                     }
                                     $entity_start = strtotime($entity->field_date['und'][0]['value']);
                                     $entity_end = strtotime($entity->field_date['und'][0]['value2']);
@@ -152,86 +159,87 @@ $is_full_view = variable_get("bhus_calendar_full_view", false);
                                     $height = (50) * $diff;
                                     //calculate margin-top pr . minute
                                     $entity_start = strtotime($start_time);
-                                    $entity_end = strtotime(date('H:i:s',strtotime($entity->field_date['und'][0]['value'])));
-                                    $diff = (($entity_end-$entity_start) / 3600);
+                                    $entity_end = strtotime(date('H:i:s', strtotime($entity->field_date['und'][0]['value'])));
+                                    $diff = (($entity_end - $entity_start) / 3600);
                                     $margin_top = ($diff * 50);
                                     ?>
                                     <?php
                                     $show_screen = (isset($entity->field_vis_p_sk_rm['und'][0]['value']) && !empty($entity->field_vis_p_sk_rm['und'][0]['value']) && $entity->field_vis_p_sk_rm['und'][0]['value'] != 0) ? "Ja" : "Nej";
                                     if (!$is_full_view) {
-                                        if($index == 0)
-                                        {
-                                        ?>
-                                            <div id="<?php echo $entity->nid ?>"  class="item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;margin-top:<?php echo $margin_top ."px"; ?>;margin-left:<?php echo $margin_index . "px"; ?>">
-                                        <?php
-                                        }
-                                        else
-                                        {
+                                        if ($index == 0) {
+                                    ?>
+                                            <div id="<?php echo $entity->nid ?>" class="item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;margin-top:<?php echo $margin_top . "px"; ?>;margin-left:<?php echo $margin_index . "px"; ?>">
+                                            <?php
+                                        } else {
                                             ?>
-                                           <div id="<?php echo $entity->nid ?>"  class="item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;margin-top:<?php echo $margin_top ."px"; ?>;">     
-                                           <?php 
-                                        }
-                                        ?>
-                                       
-                                            <div class="calendar-item-data" style="display:none;">
-                                                <input type="hidden" id="item-nid" value="<?php echo $entity->nid ?>" />
-                                                <div style="width:100%;"><h2><?php echo $entity->title ?></h2></div>
-                                                <div style="width:100%;"><?php echo "<b>Tid</b>: ".date('H:i', strtotime($entity->field_date['und'][0]['value'])) . " - " . date('H:i', strtotime($entity->field_date['und'][0]['value2'])) ?></div>
-                                                <div style="width:100%;"><?php echo isset($entity->field_kontakt_person['und'][0]['value']) ? "<b>Kontakt</b>: " . $entity->field_kontakt_person['und'][0]['value'] : "" ?></div>
-                                                <div style="width:100%;"><?php echo isset($entity->field_email['und'][0]['value']) ? "<b>Email</b>: <a href='mailto:".$entity->field_email['und'][0]['value']."'>" . $entity->field_email['und'][0]['value'] . "</a>" : "" ?></div>
-                                                                    <div style="width:100%;"><?php echo isset($entity->field_telefon['und'][0]['value']) ? "<b>Telefon</b>: " . $entity->field_telefon['und'][0]['value'] : "" ?></div>
-                                                                    <div style="width:100%;"><?php echo isset($entity->field_arrangementstype['und'][0]['value']) ? "<b>Arrangementstype</b>: " . $entity->field_arrangementstype['und'][0]['value'] : "" ?></div>
-                                                                    <div style="width:100%;"><?php echo isset($entity->field_telefon['und'][0]['value']) ? "<b>Sted</b>: " . $term->name : "" ?></div>
-                                                <div style="width:100%;"><?php echo isset($entity->body[$lang_name][0]['value']) ? $entity->body[$lang_name][0]['value'] : "" ?></div>
-                                                <div style="width:100%;"><?php echo "<br/><b>Vis på skærm</b>: " . $show_screen ?></div>
-                                            </div>
-                                        </div>
-                <?php } else { ?>
-                                        <div id="<?php echo $entity->nid ?>"  class="item full-calendar-item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;margin-top:<?php echo $margin_top ."px"; ?>;width: 100%;">
-                                            <div><?php echo $entity->title ?></div>
-                                            <div class="calendar-item-data" style="display:none;">
-                                                <input type="hidden" id="item-nid" value="<?php echo $entity->nid ?>" />
-                                                <div style="width:100%;"><h2><?php echo $entity->title ?></h2></div>
-                                                <div style="width:100%;"><?php echo "<b>Tid</b>: ".date('H:i', strtotime($entity->field_date['und'][0]['value'])) . " - " . date('H:i', strtotime($entity->field_date['und'][0]['value2'])) ?></div>
-                                                <div style="width:100%;"><?php echo isset($entity->field_kontakt_person['und'][0]['value']) ? "<b>Kontakt</b>: " . $entity->field_kontakt_person['und'][0]['value'] : "" ?></div>
-                                                <div style="width:100%;"><?php echo isset($entity->field_email['und'][0]['value']) ? "<b>Email</b>: <a href='mailto:".$entity->field_email['und'][0]['value']."'>" . $entity->field_email['und'][0]['value'] . "</a>" : "" ?></div>
-                                                <div style="width:100%;"><?php echo isset($entity->field_telefon['und'][0]['value']) ? "<b>Telefon</b>: " . $entity->field_telefon['und'][0]['value'] : "" ?></div>
-                                                <div style="width:100%;"><?php echo isset($entity->field_telefon['und'][0]['value']) ? "<b>Sted</b>: " . $term->name : "" ?></div>
-                                                <div style="width:100%;"><?php echo isset($entity->body[$lang_name][0]['value']) ? $entity->body[$lang_name][0]['value'] : "" ?></div>
-                                                <div style="width:100%;"><?php echo "<br/><b>Vis på skærm</b>: " . $show_screen ?></div>
-                                            </div>
-                                        </div>
-                                    <?php } ?>
-                                    <?php $above_items++;
-                                endforeach;
-                                ?>
-        <?php endif; ?>
-                        </div>
-                    </div>
-            <?php endforeach; ?>
-            </div>
-<?php } ?>
-    </div>
-</div>
+                                                <div id="<?php echo $entity->nid ?>" class="item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;margin-top:<?php echo $margin_top . "px"; ?>;">
+                                                <?php
+                                            }
+                                                ?>
 
-<!-- Modal -->
-<div id="event-item-info-modal"  class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><?php echo t("Informationer"); ?></h4>
-            </div>
-            <div class="modal-body">
-                <p>One fine body&hellip;</p>
-            </div>
-            <div class="modal-footer">
-                <?php if(in_array('Borgerneshus event cordinator', array_values($user->roles)) || in_array('administrator', array_values($user->roles))){ ?>
-                <a class="btn btn-default edit-bhus-event-modal-btn" >Rediger</a>
+                                                <div class="calendar-item-data" style="display:none;">
+                                                    <input type="hidden" id="item-nid" value="<?php echo $entity->nid ?>" />
+                                                    <div style="width:100%;">
+                                                        <h2><?php echo $entity->title ?></h2>
+                                                    </div>
+                                                    <div style="width:100%;"><?php echo "<b>Tid</b>: " . date('H:i', strtotime($entity->field_date['und'][0]['value'])) . " - " . date('H:i', strtotime($entity->field_date['und'][0]['value2'])) ?></div>
+                                                    <div style="width:100%;"><?php echo isset($entity->field_kontakt_person['und'][0]['value']) ? "<b>Kontakt</b>: " . $entity->field_kontakt_person['und'][0]['value'] : "" ?></div>
+                                                    <div style="width:100%;"><?php echo isset($entity->field_email['und'][0]['value']) ? "<b>Email</b>: <a href='mailto:" . $entity->field_email['und'][0]['value'] . "'>" . $entity->field_email['und'][0]['value'] . "</a>" : "" ?></div>
+                                                    <div style="width:100%;"><?php echo isset($entity->field_telefon['und'][0]['value']) ? "<b>Telefon</b>: " . $entity->field_telefon['und'][0]['value'] : "" ?></div>
+                                                    <div style="width:100%;"><?php echo isset($entity->field_arrangementstype['und'][0]['value']) ? "<b>Arrangementstype</b>: " . $entity->field_arrangementstype['und'][0]['value'] : "" ?></div>
+                                                    <div style="width:100%;"><?php echo isset($entity->field_telefon['und'][0]['value']) ? "<b>Sted</b>: " . $term->name : "" ?></div>
+                                                    <div style="width:100%;"><?php echo isset($entity->body[$lang_name][0]['value']) ? "<b>Beskrivelse</b>: " . $entity->body[$lang_name][0]['value'] : "" ?></div>
+                                                    <div style="width:100%;"><?php echo "<br/><b>Vis på skærm</b>: " . $show_screen ?></div>
+                                                </div>
+                                                </div>
+                                            <?php } else { ?>
+                                                <div id="<?php echo $entity->nid ?>" class="item full-calendar-item <?php echo $color_class ?>" style="height: <?php echo $height . "px"; ?>;margin-top:<?php echo $margin_top . "px"; ?>;width: 100%;">
+                                                    <div><?php echo $entity->title ?></div>
+                                                    <div class="calendar-item-data" style="display:none;">
+                                                        <input type="hidden" id="item-nid" value="<?php echo $entity->nid ?>" />
+                                                        <div style="width:100%;">
+                                                            <h2><?php echo $entity->title ?></h2>
+                                                        </div>
+                                                        <div style="width:100%;"><?php echo "<b>Tid</b>: " . date('H:i', strtotime($entity->field_date['und'][0]['value'])) . " - " . date('H:i', strtotime($entity->field_date['und'][0]['value2'])) ?></div>
+                                                        <div style="width:100%;"><?php echo isset($entity->field_kontakt_person['und'][0]['value']) ? "<b>Kontakt</b>: " . $entity->field_kontakt_person['und'][0]['value'] : "" ?></div>
+                                                        <div style="width:100%;"><?php echo isset($entity->field_email['und'][0]['value']) ? "<b>Email</b>: <a href='mailto:" . $entity->field_email['und'][0]['value'] . "'>" . $entity->field_email['und'][0]['value'] . "</a>" : "" ?></div>
+                                                        <div style="width:100%;"><?php echo isset($entity->field_telefon['und'][0]['value']) ? "<b>Telefon</b>: " . $entity->field_telefon['und'][0]['value'] : "" ?></div>
+                                                        <div style="width:100%;"><?php echo isset($entity->field_telefon['und'][0]['value']) ? "<b>Sted</b>: " . $term->name : "" ?></div>
+                                                        <div style="width:100%;"><?php echo isset($entity->body[$lang_name][0]['value']) ? "<b>Beskrivelse</b>: " . $entity->body[$lang_name][0]['value'] : "" ?></div>
+                                                        <div style="width:100%;"><?php echo "<br/><b>Vis på skærm</b>: " . $show_screen ?></div>
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
+                                        <?php $above_items++;
+                                    endforeach;
+                                        ?>
+                                    <?php endif; ?>
+                                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                    </div>
                 <?php } ?>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
+    </div>
+
+    <!-- Modal -->
+    <div id="event-item-info-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><?php echo t("Informationer"); ?></h4>
+                </div>
+                <div class="modal-body">
+                    <p>One fine body&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <?php if (in_array('Borgerneshus event cordinator', array_values($user->roles)) || in_array('administrator', array_values($user->roles))) { ?>
+                        <a class="btn btn-default edit-bhus-event-modal-btn">Rediger</a>
+                    <?php } ?>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
